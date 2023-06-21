@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/06/19 15:12:34 by uclement         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:37:45 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include <X11/keysym.h>
 # include <stdlib.h>
 # include <X11/X.h>
+# include <fcntl.h>
+# include <unistd.h>
+
 
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 300

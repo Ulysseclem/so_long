@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/06/19 15:12:30 by uclement         ###   ########.fr       */
+/*   Updated: 2023/06/21 15:11:44 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,12 @@
 #include <X11/keysym.h>
 #include <mlx.h>
 
-
+typedef struct s_test
+{
+	void	*mlx_ptr;
+	int width;
+	int height;
+}	t_test;
 
 void	img_pix_put(t_img *img, int x, int y, int color)
 {
@@ -74,33 +79,49 @@ void	render_background(t_img *img, int color)
 	}
 }
 
-int	handle_keypress(int keysym, t_data *data)
+
+
+int	render(t_data *data, int i)
 {
-	if (keysym == XK_Escape)
+	i = 0;
+	if (data->win_ptr == NULL)
+		return (1);
+	// render_background(&data->img, WHITE_PIXEL);
+	// render_rect(&data->img, (t_rect){WINDOW_WIDTH - 100, WINDOW_HEIGHT - 100, 100, 100, GREEN_PIXEL});
+	// render_rect(&data->img, (t_rect){0, 0, 100, 100, RED_PIXEL});
+	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 50, 50);
+	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 100, 100);
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, i, 0);
+
+	return (0);
+}
+
+int	handle_keypress(int key, t_data *data)
+{
+	static int j;
+
+	j = 30;
+	if (key == XK_Escape)
 	{
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 		data->win_ptr = NULL;
 	}
-	return (0);
-}
-
-int	render(t_data *data)
-{
-	if (data->win_ptr == NULL)
-		return (1);
-	render_background(&data->img, WHITE_PIXEL);
-	render_rect(&data->img, (t_rect){WINDOW_WIDTH - 100, WINDOW_HEIGHT - 100, 100, 100, GREEN_PIXEL});
-	render_rect(&data->img, (t_rect){0, 0, 100, 100, RED_PIXEL});
-
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
-
+	if (key == XK_a)
+	{
+		render(data, j);
+		j = j + 30;
+	}
 	return (0);
 }
 
 int	main(void)
 {
 	t_data	data;
+	t_test	bou;
+	// char	*file;
 
+	// file = open("charac.png", O_RDONLY);
+	
 	data.mlx_ptr = mlx_init();
 	if (data.mlx_ptr == NULL)
 		return (MLX_ERROR);
@@ -112,14 +133,13 @@ int	main(void)
 	}
 
 	/* Setup hooks */ 
-	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+	data.img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "charac.xpm", &bou.width, &bou.height);
 	
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
 			&data.img.line_len, &data.img.endian);
-
+	
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
-
 	mlx_loop(data.mlx_ptr);
 
 	/* we will exit the loop if there's no window left, and execute this code */
