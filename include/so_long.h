@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/06/21 12:37:45 by uclement         ###   ########.fr       */
+/*   Updated: 2023/06/27 12:00:47 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,17 @@ typedef struct s_img
 	int		endian;
 }	t_img;
 
+typedef struct s_textures
+{
+	t_img floor;
+	t_img charac;
+}	t_textures;
+
 typedef struct s_data
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
-	t_img	img;
+	t_textures	texture;
 	int		cur_img;
 }	t_data;
 

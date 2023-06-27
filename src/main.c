@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/06/21 15:11:44 by uclement         ###   ########.fr       */
+/*   Updated: 2023/06/27 13:04:53 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,12 @@ int render_rect(t_img *img, t_rect rect)
 void	render_background(t_img *img, int color)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	while (i < WINDOW_HEIGHT)
 	{
-		j = 0;
-		while (j < WINDOW_WIDTH)
-		{
-			img_pix_put(img, j++, i, color);
-		}
-		++i;
+	img_pix_put(img, 0, i, color);
+	++i;
 	}
 }
 
@@ -86,12 +81,15 @@ int	render(t_data *data, int i)
 	i = 0;
 	if (data->win_ptr == NULL)
 		return (1);
-	// render_background(&data->img, WHITE_PIXEL);
 	// render_rect(&data->img, (t_rect){WINDOW_WIDTH - 100, WINDOW_HEIGHT - 100, 100, 100, GREEN_PIXEL});
 	// render_rect(&data->img, (t_rect){0, 0, 100, 100, RED_PIXEL});
 	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 50, 50);
 	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 100, 100);
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, i, 0);
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.floor.mlx_img, i, 0);
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.floor.mlx_img, 25, 0);
+
+	render_background(&data->texture.charac, WHITE_PIXEL);
+	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.charac.mlx_img, i, 0);
 
 	return (0);
 }
@@ -133,17 +131,22 @@ int	main(void)
 	}
 
 	/* Setup hooks */ 
-	data.img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "charac.xpm", &bou.width, &bou.height);
+	data.texture.floor.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "Floors.xpm", &bou.width, &bou.height);
+	data.texture.charac.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "charac.xpm", &bou.width, &bou.height);
 	
-	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
-			&data.img.line_len, &data.img.endian);
+	// data.texture.floor.addr = mlx_get_data_addr(data.texture.floor.mlx_img, &data.texture.floor.bpp,
+	// 		&data.texture.floor.line_len, &data.texture.floor.endian);
 	
+	data.texture.charac.addr = mlx_get_data_addr(data.texture.charac.mlx_img, &data.texture.charac.bpp,
+			&data.texture.charac.line_len, &data.texture.charac.endian);
+
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
 	mlx_loop(data.mlx_ptr);
 
 	/* we will exit the loop if there's no window left, and execute this code */
-	mlx_destroy_image(data.mlx_ptr, data.img.mlx_img);
+	mlx_destroy_image(data.mlx_ptr, data.texture.floor.mlx_img);
+	mlx_destroy_image(data.mlx_ptr, data.texture.charac.mlx_img);
 	mlx_destroy_display(data.mlx_ptr);
 	free(data.mlx_ptr);
 }
