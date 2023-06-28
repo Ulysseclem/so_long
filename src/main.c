@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/06/27 13:04:53 by uclement         ###   ########.fr       */
+/*   Updated: 2023/06/28 12:51:22 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,21 @@ void	render_background(t_img *img, int color)
 
 
 
-int	render(t_data *data, int i)
+int	render(t_data *data, int x, int y, int i)
 {
-	i = 0;
 	if (data->win_ptr == NULL)
 		return (1);
 	// render_rect(&data->img, (t_rect){WINDOW_WIDTH - 100, WINDOW_HEIGHT - 100, 100, 100, GREEN_PIXEL});
 	// render_rect(&data->img, (t_rect){0, 0, 100, 100, RED_PIXEL});
 	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 50, 50);
 	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 100, 100);
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.floor.mlx_img, i, 0);
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.floor.mlx_img, 25, 0);
-
-	render_background(&data->texture.charac, WHITE_PIXEL);
+	if (i == 1)
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.wall.mlx_img, x, y);
+	if (i == 3)
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.wall2.mlx_img, x, y);
+	if (i == 2)
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.floor.mlx_img, x, y);
+	// render_background(&data->texture.charac, WHITE_PIXEL);
 	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.charac.mlx_img, i, 0);
 
 	return (0);
@@ -103,11 +105,6 @@ int	handle_keypress(int key, t_data *data)
 	{
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 		data->win_ptr = NULL;
-	}
-	if (key == XK_a)
-	{
-		render(data, j);
-		j = j + 30;
 	}
 	return (0);
 }
@@ -130,19 +127,27 @@ int	main(void)
 		return (MLX_ERROR);
 	}
 
-	/* Setup hooks */ 
+	/* Setup texture to an image*/ 
 	data.texture.floor.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "Floors.xpm", &bou.width, &bou.height);
+	data.texture.wall.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "wall1.xpm", &bou.width, &bou.height);
+	data.texture.wall2.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "wall2.xpm", &bou.width, &bou.height);
 	data.texture.charac.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "charac.xpm", &bou.width, &bou.height);
 	
+	// mlx_pixel_put(data.mlx_ptr, data.win_ptr, 10, 10, WHITE_PIXEL);
+		
 	// data.texture.floor.addr = mlx_get_data_addr(data.texture.floor.mlx_img, &data.texture.floor.bpp,
 	// 		&data.texture.floor.line_len, &data.texture.floor.endian);
 	
-	data.texture.charac.addr = mlx_get_data_addr(data.texture.charac.mlx_img, &data.texture.charac.bpp,
-			&data.texture.charac.line_len, &data.texture.charac.endian);
+	// data.texture.charac.addr = mlx_get_data_addr(data.texture.charac.mlx_img, &data.texture.charac.bpp,
+	// 		&data.texture.charac.line_len, &data.texture.charac.endian);
+	map_test(data);
 
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
 	mlx_loop(data.mlx_ptr);
+
+
+
 
 	/* we will exit the loop if there's no window left, and execute this code */
 	mlx_destroy_image(data.mlx_ptr, data.texture.floor.mlx_img);

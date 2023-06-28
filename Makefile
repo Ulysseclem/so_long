@@ -30,6 +30,9 @@ INCS        := include    \
 
 SRC_DIR     := src
 SRCS        := main.c \
+			get_next_line_utils.c \
+			get_next_line.c \
+			readmap.c \
 
 SRCS        := $(SRCS:%=$(SRC_DIR)/%)
 BUILD_DIR   := .build

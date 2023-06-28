@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/06/27 12:00:47 by uclement         ###   ########.fr       */
+/*   Updated: 2023/06/28 12:49:19 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,19 @@
 # define SO_LONG_H
 
 # include "mlx.h"
+# include "libft.h"
 # include <stdio.h>
 # include <X11/keysym.h>
 # include <stdlib.h>
 # include <X11/X.h>
 # include <fcntl.h>
 # include <unistd.h>
+# include <inttypes.h>
+# include <sys/types.h>
+# include <sys/uio.h>
+# include <fcntl.h>
 
+#define BUFFER_SIZE 5
 
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 300
@@ -43,6 +49,8 @@ typedef struct s_img
 typedef struct s_textures
 {
 	t_img floor;
+	t_img wall;
+	t_img wall2;
 	t_img charac;
 }	t_textures;
 
@@ -64,5 +72,19 @@ typedef struct s_rect
 }	t_rect;
 
 int main(void);
+
+char	*get_next_line(int fd);
+void	to_line(char *stock, char **line);
+void	read_stock(char **stock, int fd);
+void	free_stock(char **stock);
+
+int		check_newline(char *buf);
+char	*gnl_strjoin(char *s1, char *s2);
+size_t	ft_strlen(const char *s);
+char	*ft_strdup(const char *s);
+
+void	map_test(t_data data);
+void	test (char *line, int ligne, t_data data);
+int	render(t_data *data, int x, int y, int i);
 
 #endif
