@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/06/28 12:49:19 by uclement         ###   ########.fr       */
+/*   Updated: 2023/06/29 18:16:37 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_img
 typedef struct s_textures
 {
 	t_img floor;
+	t_img floor2;
 	t_img wall;
 	t_img wall2;
 	t_img charac;
@@ -86,5 +87,10 @@ char	*ft_strdup(const char *s);
 void	map_test(t_data data);
 void	test (char *line, int ligne, t_data data);
 int	render(t_data *data, int x, int y, int i);
+
+char	*ft_strcpy(char *dest, char *src);
+void terrain(char *ligne, int size);
+void map_print(char **map, t_data data);
+
 
 #endif

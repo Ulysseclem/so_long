@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/06/28 12:51:22 by uclement         ###   ########.fr       */
+/*   Updated: 2023/06/29 18:28:47 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,14 @@ int	render(t_data *data, int x, int y, int i)
 	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 100, 100);
 	if (i == 1)
 		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.wall.mlx_img, x, y);
-	if (i == 3)
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.wall2.mlx_img, x, y);
 	if (i == 2)
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.wall2.mlx_img, x, y);
+	if (i == 0)
 		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.floor.mlx_img, x, y);
+	if (i == 9)
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.floor2.mlx_img, x, y);
+	if (i == 5)
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.charac.mlx_img, x, y);
 	// render_background(&data->texture.charac, WHITE_PIXEL);
 	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.charac.mlx_img, i, 0);
 
@@ -129,7 +133,8 @@ int	main(void)
 
 	/* Setup texture to an image*/ 
 	data.texture.floor.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "Floors.xpm", &bou.width, &bou.height);
-	data.texture.wall.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "wall1.xpm", &bou.width, &bou.height);
+	data.texture.floor2.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "Floors2.xpm", &bou.width, &bou.height);
+	data.texture.wall.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "wall.xpm", &bou.width, &bou.height);
 	data.texture.wall2.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "wall2.xpm", &bou.width, &bou.height);
 	data.texture.charac.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "charac.xpm", &bou.width, &bou.height);
 	
