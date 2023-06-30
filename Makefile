@@ -33,6 +33,7 @@ SRCS        := main.c \
 			get_next_line_utils.c \
 			get_next_line.c \
 			readmap.c \
+			map_error.c
 
 SRCS        := $(SRCS:%=$(SRC_DIR)/%)
 BUILD_DIR   := .build

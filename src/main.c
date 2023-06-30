@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/06/29 18:28:47 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/06/30 13:01:44 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@
 #include <X11/X.h>
 #include <X11/keysym.h>
 #include <mlx.h>
+
+
+void	error_exit(void)
+{
+	write(2, "Error\n", 6);
+	exit (0);
+}
 
 typedef struct s_test
 {
@@ -116,27 +123,29 @@ int	handle_keypress(int key, t_data *data)
 int	main(void)
 {
 	t_data	data;
-	t_test	bou;
+	
+	(void)data.mlx_ptr;
+		// t_test	bou;
 	// char	*file;
 
 	// file = open("charac.png", O_RDONLY);
 	
-	data.mlx_ptr = mlx_init();
-	if (data.mlx_ptr == NULL)
-		return (MLX_ERROR);
-	data.win_ptr = mlx_new_window(data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "my window");
-	if (data.win_ptr == NULL)
-	{
-		free(data.win_ptr);
-		return (MLX_ERROR);
-	}
+		// data.mlx_ptr = mlx_init();
+		// if (data.mlx_ptr == NULL)
+		// 	return (MLX_ERROR);
+		// data.win_ptr = mlx_new_window(data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "my window");
+		// if (data.win_ptr == NULL)
+		// {
+		// 	free(data.win_ptr);
+		// 	return (MLX_ERROR);
+		// }
 
 	/* Setup texture to an image*/ 
-	data.texture.floor.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "Floors.xpm", &bou.width, &bou.height);
-	data.texture.floor2.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "Floors2.xpm", &bou.width, &bou.height);
-	data.texture.wall.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "wall.xpm", &bou.width, &bou.height);
-	data.texture.wall2.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "wall2.xpm", &bou.width, &bou.height);
-	data.texture.charac.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "charac.xpm", &bou.width, &bou.height);
+		// data.texture.floor.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "Floors.xpm", &bou.width, &bou.height);
+		// data.texture.floor2.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "Floors2.xpm", &bou.width, &bou.height);
+		// data.texture.wall.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "wall.xpm", &bou.width, &bou.height);
+		// data.texture.wall2.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "wall2.xpm", &bou.width, &bou.height);
+		// data.texture.charac.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "charac.xpm", &bou.width, &bou.height);
 	
 	// mlx_pixel_put(data.mlx_ptr, data.win_ptr, 10, 10, WHITE_PIXEL);
 		
@@ -147,16 +156,16 @@ int	main(void)
 	// 		&data.texture.charac.line_len, &data.texture.charac.endian);
 	map_test(data);
 
-	mlx_loop_hook(data.mlx_ptr, &render, &data);
-	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
-	mlx_loop(data.mlx_ptr);
+		// mlx_loop_hook(data.mlx_ptr, &render, &data);
+		// mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
+		// mlx_loop(data.mlx_ptr);
 
 
 
 
 	/* we will exit the loop if there's no window left, and execute this code */
-	mlx_destroy_image(data.mlx_ptr, data.texture.floor.mlx_img);
-	mlx_destroy_image(data.mlx_ptr, data.texture.charac.mlx_img);
-	mlx_destroy_display(data.mlx_ptr);
-	free(data.mlx_ptr);
+		// mlx_destroy_image(data.mlx_ptr, data.texture.floor.mlx_img);
+		// mlx_destroy_image(data.mlx_ptr, data.texture.charac.mlx_img);
+		// mlx_destroy_display(data.mlx_ptr);
+		// free(data.mlx_ptr);
 }

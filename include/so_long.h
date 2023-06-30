@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/06/29 18:16:37 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/06/30 10:20:47 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,16 @@ char	*gnl_strjoin(char *s1, char *s2);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s);
 
-void	map_test(t_data data);
-void	test (char *line, int ligne, t_data data);
+void	error_exit(void);
 int	render(t_data *data, int x, int y, int i);
 
+void	map_test(t_data data);
 char	*ft_strcpy(char *dest, char *src);
-void terrain(char *ligne, int size);
-void map_print(char **map, t_data data);
+void 	map_print(char **map, t_data data, int size);
+int		map_size(void);
+void	free_map(char **map, int size);
+
+void	map_error(char **map, int y);
 
 
 #endif
