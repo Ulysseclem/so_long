@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/06/30 10:20:47 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/04 18:55:48 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,12 @@ typedef struct s_rect
 	int color;
 }	t_rect;
 
+typedef struct s_pos
+{
+	int	x;
+	int	y;
+}	t_pos;
+
 int main(void);
 
 char	*get_next_line(int fd);
@@ -94,6 +100,9 @@ int		map_size(void);
 void	free_map(char **map, int size);
 
 void	map_error(char **map, int y);
+void 	map_flood(char **map, int x, int y);
+t_pos map_find_start(char **map);
+int	map_flood_check(char **map);
 
 
 #endif
