@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/05 11:42:53 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/05 13:59:16 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,17 @@
 #define RED_PIXEL 0xFF0000
 #define GREEN_PIXEL 0xFF00
 #define WHITE_PIXEL 0xFFFFFF
+
+typedef struct s_map
+{
+	char	**map;
+	int		x;
+	int		y;
+	int		start_x;
+	int		start_y;
+	int		start;
+}	t_map;
+
 
 typedef struct s_img
 {
@@ -90,18 +101,18 @@ char	*gnl_strjoin(char *s1, char *s2);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s);
 
-void	error_exit(void);
+void	error_exit(char *str);
 int	render(t_data *data, int x, int y, int i);
 
 void	map_test(t_data data);
 char	*ft_strcpy(char *dest, char *src);
 void 	map_print(char **map, t_data data, int size);
-int		map_size(void);
+void	map_size(t_map *map);
 void	free_map(char **map, int size);
 
-void	map_error(char **map, int y);
-void 	map_flood(char **map, int x, int y);
-t_pos map_find_start(char **map, int size);
+void	map_error(t_map *map);
+void	map_flood(char **map, int x, int y);
+void 	map_find_start(t_map *map);
 int	map_flood_check(char **map, int size);
 
 

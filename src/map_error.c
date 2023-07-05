@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:04:57 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/05 12:04:39 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/05 14:22:17 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,123 +14,120 @@
 
 
 
-void	map_error(char **map, int y)
+void	map_error(t_map *map)
 {
-	int	x;
 	int	i;
 	int	j;
 	int error_e;
 	int error_p;
-	t_pos start;
+	char **map_bis;
 	
 	// taille de la carte (carre ou trop petit)
-	x = ft_strlen(map[0]);
-	if (y == x || (x < 3 && y < 3) || x * y < 14)
+	map->x = ft_strlen(map->map[0]);
+	if (map->y == map->x || (map->x < 3 && map->y < 3) || map->x * map->y < 14)
 	{
-		free_map(map, y);
-		error_exit();
+		free_map(map->map, map->y);
+		error_exit("error : wrong map size\n");
 	}
 	// ligne pas de meme taille et bordure de la carte
 	i = 0;
 	error_e = 0;
 	error_p = 0;
-	while (i < y)
+	while (i < map->y)
 	{
 		j = 0;
-		if (ft_strlen(map[i]) != (size_t)x)
+		if (ft_strlen(map->map[i]) != (size_t)map->x)
 			{
-				free_map(map, y);
-				error_exit();
+				free_map(map->map, map->y);
+				error_exit("error : wrong row lengh\n");
 			}
-		while (map[i][j] != '\0')
+		while (map->map[i][j] != '\0')
 		{
-			if (map[i][j] != '0' && map[i][j] != '1' && map[i][j] != 'C' && \
-			map[i][j] != 'E' && map[i][j] != 'P')
+			if (map->map[i][j] != '0' && map->map[i][j] != '1' && map->map[i][j] != 'C' && \
+			map->map[i][j] != 'E' && map->map[i][j] != 'P')
 			{
-				free_map(map, y);
-				error_exit();				
+				free_map(map->map, map->y);
+				error_exit("error : unkown map tiles\n");				
 			}
 			// gestion des bordure
-			if (map[0][j] != '1')
+			if (map->map[0][j] != '1')
 			{
-				free_map(map, y);
-				error_exit();
+				free_map(map->map, map->y);
+				error_exit("error : missing border tile(s)\n");
 			}
-			if (map[y - 1][j] != '1')
+			if (map->map[map->y - 1][j] != '1')
 			{
-				free_map(map, y);
-				error_exit();
+				free_map(map->map, map->y);
+				error_exit("error : missing border tile(s)\n");
 			}
 			// si trop de de E ou P - a split dans une autre fonction
-			if (map[i][j] == 'E')
+			if (map->map[i][j] == 'E')
 				error_e++;
-			if (map[i][j] == 'P')
+			if (map->map[i][j] == 'P')
 				error_p++;
-			if (error_e > 1 || error_p > 1)
-			{
-				free_map(map, y);
-				error_exit();
-			}
+
 			j++;
 		}
 		i++;
 	}
-	// sortie accessible ?
-	start = map_find_start(map, y);
-	char **map_bis;
-	map_bis = malloc(sizeof(map) * y);
-	i = 0;
-	while (i < y)
+	if (error_e != 1 || error_p != 1)
 	{
-		map_bis[i] = ft_strcpy(map_bis[i], map[i]);
+		free_map(map->map, map->y);
+		error_exit("error : wrong nbr of exit/character\n");
+	}
+	// sortie accessible ?
+	map_find_start(map);
+	map_bis = malloc(sizeof(char *) * map->y);
+	i = 0;
+	while (i < map->y)
+	{
+		map_bis[i] = ft_strcpy(map_bis[i], map->map[i]);
 		i++;
 	}
-	map_flood(map_bis, start.x, start.y);
-	if (map_flood_check(map_bis, y) == 1)
+	map_flood(map_bis, map->start_x, map->start_y);
+	if (map_flood_check(map_bis, map->y) == 1)
 		{
-			free_map(map_bis, y);
-			error_exit();
+			free_map(map_bis, map->y);
+			error_exit("error : Exit unreachable");
 		}
 
 	// print test
 	i = 0;
-	while (i < y)
+	while (i < map->y)
 	{
-		printf("F%c = %s\n", i, map[i]);
+		printf("F%c = %s\n", i, map->map[i]);
 		i++;
 	}
 	i = 0;
-	while (i < y)
+	while (i < map->y)
 	{
 		printf("B%c = %s\n", i, map_bis[i]);
 		i++;
 	}
-	free_map(map_bis, y);
+	free_map(map_bis, map->y);
 
 }
 
-t_pos map_find_start(char **map, int size)
+void map_find_start(t_map *map)
 {
 	int i;
 	int	j;
-	t_pos start;
 	
 	i = 0;
-	while (i < size)
+	while (i < map->y)
 	{
 		j = 0;
-		while (map[i][j])
+		while (map->map[i][j])
 		{
-			if (map[i][j] == 'P')
+			if (map->map[i][j] == 'P')
 			{
-				start.x = i;
-				start.y = j;
+				map->start_x = i;
+				map->start_y = j;
 			}
 			j++;
 		}
 		i++;
 	}
-	return (start);
 }
 
 void map_flood(char **map, int x, int y)

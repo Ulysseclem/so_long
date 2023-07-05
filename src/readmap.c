@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 10:35:25 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/05 12:07:50 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/05 14:22:43 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,16 @@ void map_test(t_data data)
 {
 	int 	fd;
 	char	*line;
-	char 	**map;
 	int		i;
-	int		size;
-
+	t_map	map;
+	
+	map.y = 0;
+	map.x = 0;
 	(void)data.mlx_ptr;
 
-	size = map_size();
-	map = malloc(sizeof(char *) * size);
-	if (!map)
+	map_size(&map);
+	map.map = malloc(sizeof(char *) * map.y);
+	if (!map.map)
 		return ;
 	fd = open("map.ber", O_RDONLY);
 	i = 0;
@@ -36,35 +37,32 @@ void map_test(t_data data)
 			free(line);
 			break ;
 		}
-		map[i] = ft_strcpy(map[i], line);
-		printf("L: %s\n", map[i]);
+		map.map[i] = ft_strcpy(map.map[i], line);
+		printf("L: %s\n", map.map[i]);
 		free(line);
 		i++;
 	}
 	close(fd);
-	map_error(map, size);
-	map_print(map, data, size);
-	free_map(map, size);
+	map_error(&map);
+	// map_print(map, data, size);
+	free_map(map.map, map.y);
 }
 
 /* Pour connaitre la taille y de la carte */
 
-int	map_size(void)
+void	map_size(t_map *map)
 {
 	int		fd;
 	char	*line;
-	int		size;
 
-
-	size = 0;
 	fd = open("map.ber", O_RDONLY);
 	while (1)
 	{
 		line = get_next_line(fd);
-		if (line == NULL && size == 0)
+		if (line == NULL && map->y == 0)
 		{	
 			free(line);
-			error_exit();
+			error_exit("error: empty map\n");
 			break ;
 		}
 		if (line == NULL)
@@ -73,10 +71,9 @@ int	map_size(void)
 			break ;
 		}
 		free(line);
-		size++;
+		map->y++;
 	}
 	close(fd);
-	return (size);
 }
 
 void map_print(char **map, t_data data, int size)
