@@ -3,20 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   map_error.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:04:57 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/04 18:56:34 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/05 12:04:39 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+
 
 void	map_error(char **map, int y)
 {
 	int	x;
 	int	i;
 	int	j;
+	int error_e;
+	int error_p;
 	t_pos start;
 	
 	// taille de la carte (carre ou trop petit)
@@ -28,7 +32,9 @@ void	map_error(char **map, int y)
 	}
 	// ligne pas de meme taille et bordure de la carte
 	i = 0;
-	while (map[i])
+	error_e = 0;
+	error_p = 0;
+	while (i < y)
 	{
 		j = 0;
 		if (ft_strlen(map[i]) != (size_t)x)
@@ -44,6 +50,7 @@ void	map_error(char **map, int y)
 				free_map(map, y);
 				error_exit();				
 			}
+			// gestion des bordure
 			if (map[0][j] != '1')
 			{
 				free_map(map, y);
@@ -54,39 +61,67 @@ void	map_error(char **map, int y)
 				free_map(map, y);
 				error_exit();
 			}
+			// si trop de de E ou P - a split dans une autre fonction
+			if (map[i][j] == 'E')
+				error_e++;
+			if (map[i][j] == 'P')
+				error_p++;
+			if (error_e > 1 || error_p > 1)
+			{
+				free_map(map, y);
+				error_exit();
+			}
 			j++;
 		}
 		i++;
 	}
-	start = map_find_start(map);
-	map_flood(map, start.x, start.y);
-	if (map_flood_check(map) == 1)
+	// sortie accessible ?
+	start = map_find_start(map, y);
+	char **map_bis;
+	map_bis = malloc(sizeof(map) * y);
+	i = 0;
+	while (i < y)
+	{
+		map_bis[i] = ft_strcpy(map_bis[i], map[i]);
+		i++;
+	}
+	map_flood(map_bis, start.x, start.y);
+	if (map_flood_check(map_bis, y) == 1)
 		{
-			free_map(map, y);
+			free_map(map_bis, y);
 			error_exit();
-		}	
-	//priint test
-	i = 0;		
-	while (map[i])
+		}
+
+	// print test
+	i = 0;
+	while (i < y)
 	{
 		printf("F%c = %s\n", i, map[i]);
 		i++;
 	}
+	i = 0;
+	while (i < y)
+	{
+		printf("B%c = %s\n", i, map_bis[i]);
+		i++;
+	}
+	free_map(map_bis, y);
+
 }
 
-t_pos map_find_start(char **map)
+t_pos map_find_start(char **map, int size)
 {
 	int i;
 	int	j;
 	t_pos start;
 	
 	i = 0;
-	while (map[i])
+	while (i < size)
 	{
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == 'C')
+			if (map[i][j] == 'P')
 			{
 				start.x = i;
 				start.y = j;
@@ -100,7 +135,7 @@ t_pos map_find_start(char **map)
 
 void map_flood(char **map, int x, int y)
 {	
-	if (map[x][y] == 'C' || map[x][y] == '0' || map[x][y] == 'E')
+	if (map[x][y] == 'C' || map[x][y] == '0' || map[x][y] == 'E' || map[x][y] == 'P')
 	{
 		map[x][y] = 'X';
 		map_flood(map, x + 1, y);
@@ -110,12 +145,13 @@ void map_flood(char **map, int x, int y)
 	}
 }
 
-int	map_flood_check(char **map)
+int	map_flood_check(char **map, int size)
 {
 	int i;
 	int j;
+
 	i =0;
-	while (map[i])
+	while (i < size)
 	{
 		j = 0;
 		while (map[i][j])

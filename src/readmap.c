@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 10:35:25 by uclement          #+#    #+#             */
-/*   Updated: 2023/06/30 13:06:55 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/05 12:07:50 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,10 @@ void map_test(t_data data)
 
 	(void)data.mlx_ptr;
 
-
 	size = map_size();
-	map = malloc(sizeof(map) * size + 1);
+	map = malloc(sizeof(char *) * size);
 	if (!map)
 		return ;
-	ft_bzero(map, size + 1);
 	fd = open("map.ber", O_RDONLY);
 	i = 0;
 	while (1)
@@ -45,7 +43,7 @@ void map_test(t_data data)
 	}
 	close(fd);
 	map_error(map, size);
-	// map_print(map, data, size);
+	map_print(map, data, size);
 	free_map(map, size);
 }
 
@@ -63,7 +61,6 @@ int	map_size(void)
 	while (1)
 	{
 		line = get_next_line(fd);
-		printf("%s",line);
 		if (line == NULL && size == 0)
 		{	
 			free(line);
@@ -107,7 +104,7 @@ void map_print(char **map, t_data data, int size)
 				render(&data, px_x, px_y, 2);	
 			else if (map[i][j] == '1')
 				render(&data, px_x, px_y, 1);
-			else if (map[i][j] == 'c')
+			else if (map[i][j] == 'P')
 				render(&data, px_x, px_y, 5);
 			px_x = px_x + 25;
 			j++;

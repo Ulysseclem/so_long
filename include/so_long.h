@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/04 18:55:48 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/05 11:42:53 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ void	free_map(char **map, int size);
 
 void	map_error(char **map, int y);
 void 	map_flood(char **map, int x, int y);
-t_pos map_find_start(char **map);
-int	map_flood_check(char **map);
+t_pos map_find_start(char **map, int size);
+int	map_flood_check(char **map, int size);
 
 
 #endif
