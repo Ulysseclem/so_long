@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/05 13:59:16 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/05 22:59:23 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,17 @@ typedef struct s_map
 	int		y;
 	int		start_x;
 	int		start_y;
+	int		nbr_PE;
+	int		nbr_C;
 	int		start;
 }	t_map;
 
+typedef struct s_game
+{
+	void	*mlx_ptr;
+	void	*win_ptr;
+	t_map	map;	
+}	t_game
 
 typedef struct s_img
 {
@@ -102,15 +110,20 @@ size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s);
 
 void	error_exit(char *str);
+void	error_exit_free_map(char *str, t_map *map);
 int	render(t_data *data, int x, int y, int i);
 
 void	map_test(t_data data);
+void	map_init(t_map *map);
+char	**map_cpy(char **map, int size);
+
 char	*ft_strcpy(char *dest, char *src);
-void 	map_print(char **map, t_data data, int size);
+void 	map_print(t_map *map, t_data data);
 void	map_size(t_map *map);
 void	free_map(char **map, int size);
 
 void	map_error(t_map *map);
+void 	map_is_possible(t_map *map);
 void	map_flood(char **map, int x, int y);
 void 	map_find_start(t_map *map);
 int	map_flood_check(char **map, int size);

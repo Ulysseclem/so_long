@@ -3,109 +3,70 @@
 /*                                                        :::      ::::::::   */
 /*   map_error.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:04:57 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/05 14:22:17 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/05 22:38:59 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-
-
 void	map_error(t_map *map)
 {
 	int	i;
 	int	j;
-	int error_e;
-	int error_p;
-	char **map_bis;
 	
-	// taille de la carte (carre ou trop petit)
-	map->x = ft_strlen(map->map[0]);
 	if (map->y == map->x || (map->x < 3 && map->y < 3) || map->x * map->y < 14)
-	{
-		free_map(map->map, map->y);
-		error_exit("error : wrong map size\n");
-	}
-	// ligne pas de meme taille et bordure de la carte
+		error_exit_free_map("error : wrong map size\n", map);
 	i = 0;
-	error_e = 0;
-	error_p = 0;
 	while (i < map->y)
 	{
 		j = 0;
 		if (ft_strlen(map->map[i]) != (size_t)map->x)
-			{
-				free_map(map->map, map->y);
-				error_exit("error : wrong row lengh\n");
-			}
+				error_exit_free_map("error : wrong row lengh\n", map);
 		while (map->map[i][j] != '\0')
 		{
-			if (map->map[i][j] != '0' && map->map[i][j] != '1' && map->map[i][j] != 'C' && \
-			map->map[i][j] != 'E' && map->map[i][j] != 'P')
-			{
-				free_map(map->map, map->y);
-				error_exit("error : unkown map tiles\n");				
-			}
-			// gestion des bordure
-			if (map->map[0][j] != '1')
-			{
-				free_map(map->map, map->y);
-				error_exit("error : missing border tile(s)\n");
-			}
-			if (map->map[map->y - 1][j] != '1')
-			{
-				free_map(map->map, map->y);
-				error_exit("error : missing border tile(s)\n");
-			}
-			// si trop de de E ou P - a split dans une autre fonction
-			if (map->map[i][j] == 'E')
-				error_e++;
-			if (map->map[i][j] == 'P')
-				error_p++;
-
+			if (map->map[i][j] != '0' && map->map[i][j] != '1' && \
+			map->nbr_PE != 2 && map->map[i][j] != 'C' && \
+			map->map[i][j] != 'E' && map->map[i][j] != 'P' && \
+			(map->map[0][j] != '1' || map->map[map->y - 1][j] != '1'))
+				error_exit_free_map("error : issues wuth map tiles\n", map);	
+			if (map->map[i][j] == 'E' || map->map[i][j] == 'P')
+				map->nbr_PE++;
 			j++;
 		}
 		i++;
 	}
-	if (error_e != 1 || error_p != 1)
-	{
-		free_map(map->map, map->y);
-		error_exit("error : wrong nbr of exit/character\n");
-	}
-	// sortie accessible ?
+	map_is_possible(map);
+}
+
+void map_is_possible(t_map *map)
+{
+	char **map_bis;
 	map_find_start(map);
-	map_bis = malloc(sizeof(char *) * map->y);
-	i = 0;
-	while (i < map->y)
-	{
-		map_bis[i] = ft_strcpy(map_bis[i], map->map[i]);
-		i++;
-	}
+	map_bis = 0;
+	map_bis = map_cpy(map_bis, map->y);
 	map_flood(map_bis, map->start_x, map->start_y);
 	if (map_flood_check(map_bis, map->y) == 1)
 		{
 			free_map(map_bis, map->y);
-			error_exit("error : Exit unreachable");
+			error_exit_free_map("error : Exit unreachable", map);
 		}
-
-	// print test
-	i = 0;
-	while (i < map->y)
-	{
-		printf("F%c = %s\n", i, map->map[i]);
-		i++;
-	}
-	i = 0;
-	while (i < map->y)
-	{
-		printf("B%c = %s\n", i, map_bis[i]);
-		i++;
-	}
+	// // print test
+	// i = 0;
+	// while (i < map->y)
+	// {
+	// 	printf("F%c = %s\n", i, map->map[i]);
+	// 	i++;
+	// }
+	// i = 0;
+	// while (i < map->y)
+	// {
+	// 	printf("B%c = %s\n", i, map_bis[i]);
+	// 	i++;
+	// }
 	free_map(map_bis, map->y);
-
 }
 
 void map_find_start(t_map *map)

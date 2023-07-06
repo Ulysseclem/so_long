@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readmap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 10:35:25 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/05 14:22:43 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/05 22:57:47 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,14 @@
 
 void map_test(t_data data)
 {
-	int 	fd;
-	char	*line;
-	int		i;
 	t_map	map;
 	
-	map.y = 0;
-	map.x = 0;
 	(void)data.mlx_ptr;
-
+	map_init(&map);
 	map_size(&map);
-	map.map = malloc(sizeof(char *) * map.y);
-	if (!map.map)
-		return ;
-	fd = open("map.ber", O_RDONLY);
-	i = 0;
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-		{	
-			free(line);
-			break ;
-		}
-		map.map[i] = ft_strcpy(map.map[i], line);
-		printf("L: %s\n", map.map[i]);
-		free(line);
-		i++;
-	}
-	close(fd);
+	map.map = map_cpy(map.map, map.y);
 	map_error(&map);
-	// map_print(map, data, size);
+	map_print(&map, data);
 	free_map(map.map, map.y);
 }
 
@@ -54,7 +31,6 @@ void	map_size(t_map *map)
 {
 	int		fd;
 	char	*line;
-
 	fd = open("map.ber", O_RDONLY);
 	while (1)
 	{
@@ -70,13 +46,13 @@ void	map_size(t_map *map)
 			free(line);
 			break ;
 		}
+		map->x = ft_strlen(line);
 		free(line);
 		map->y++;
 	}
 	close(fd);
 }
-
-void map_print(char **map, t_data data, int size)
+void map_print(t_map *map, t_data data)
 {
 	int i;
 	int j;
@@ -85,23 +61,23 @@ void map_print(char **map, t_data data, int size)
 
 	px_y = 0;
 	i = 0;
-	while (map[i])
+	while (i < map->y)
 	{
 		px_x = 0;
 		j = 0;
-		while (map[i][j])
+		while (map->map[i][j])
 		{
-			if (i > 0 && (map[i][j] == '0' && map[i - 1][j] == '1'))
+			if (i > 0 && (map->map[i][j] == '0' && map->map[i - 1][j] == '1'))
 			{
 				render(&data, px_x, (px_y + 18), 9);
 			}
-			else if (map[i][j] == '0')
+			else if (map->map[i][j] == '0')
 				render(&data, px_x, px_y, 0);
-			if ((i < (size - 1) && map[i][j] == '1' && map[i + 1][j] == '1'))
+			if ((i < (map->y - 1) && map->map[i][j] == '1' && map->map[i + 1][j] == '1'))
 				render(&data, px_x, px_y, 2);	
-			else if (map[i][j] == '1')
+			else if (map->map[i][j] == '1')
 				render(&data, px_x, px_y, 1);
-			else if (map[i][j] == 'P')
+			else if (map->map[i][j] == 'P')
 				render(&data, px_x, px_y, 5);
 			px_x = px_x + 25;
 			j++;
@@ -141,4 +117,39 @@ void free_map(char **map, int size)
 		i++;
 	}
 	free(map);
+}
+
+void	map_init(t_map *map)
+{
+	map->y = 0;
+	map->x = 0;
+	map->nbr_PE = 0;
+}
+
+char	**map_cpy(char **map, int size)
+{
+	int 	fd;
+	char	*line;
+	int		i;
+	
+	map = malloc(sizeof(char *) * size);
+	if (!map)
+		return (0);
+	fd = open("map.ber", O_RDONLY);
+	i = 0;
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (line == NULL)
+		{	
+			free(line);
+			break ;
+		}
+		map[i] = ft_strcpy(map[i], line);
+		// printf("L: %s\n", map.map[i]);
+		free(line);
+		i++;
+	}
+	close(fd);
+	return (map);
 }
