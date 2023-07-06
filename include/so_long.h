@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/06 11:48:36 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/06 14:20:42 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_textures
 	t_img wall;
 	t_img wall2;
 	t_img charac;
+	t_img gold;
 }	t_textures;
 
 typedef struct s_data
@@ -114,14 +115,14 @@ char	*ft_strdup(const char *s);
 
 void	error_exit(char *str);
 void	error_exit_free_map(char *str, t_map *map);
-int	render(t_game *game, int x, int y, void *img);
+int		render(t_game *game, int x, int y, void *img);
 
 void	map_test(t_game *data);
 void	map_init(t_map *map);
 char	**map_cpy(char **map, int size);
 
 char	*ft_strcpy(char *dest, char *src);
-void 	map_print(t_game *data);
+int 	map_print(t_game *data);
 void	map_size(t_map *map);
 void	free_map(char **map, int size);
 

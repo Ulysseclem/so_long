@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 10:35:25 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/06 11:41:24 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/06 14:37:09 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,15 @@ void	map_size(t_map *map)
 	}
 	close(fd);
 }
-void map_print(t_game *game)
+int map_print(t_game *game)
 {
 	int i;
 	int j;
 	int	px_x;
 	int	px_y;
 
-	px_y = 0;
 	i = 0;
+	px_y = 0;
 	while (i < game->map.y)
 	{
 		px_x = 0;
@@ -68,22 +68,25 @@ void map_print(t_game *game)
 		{
 			if (i > 0 && (game->map.map[i][j] == '0' && game->map.map[i - 1][j] == '1'))
 			{
-				render(game, px_x, (px_y + 18), game->texture.floor2.mlx_img);
+				render(game, px_x, (px_y + 20), game->texture.floor2.mlx_img);
 			}
 			else if (game->map.map[i][j] == '0')
-				render(game, px_x, px_y, game->texture.floor.mlx_img);
+				render(game, px_x, px_y + 6, game->texture.floor.mlx_img);
+			if (game->map.map[i][j] == 'C')
+				render(game, px_x, px_y + 6, game->texture.gold.mlx_img);
 			if ((i < (game->map.y - 1) && game->map.map[i][j] == '1' && game->map.map[i + 1][j] == '1'))
 				render(game, px_x, px_y, game->texture.wall2.mlx_img);	
 			else if (game->map.map[i][j] == '1')
 				render(game, px_x, px_y, game->texture.wall.mlx_img);
 			else if (game->map.map[i][j] == 'P')
-				render(game, px_x, px_y, game->texture.charac.mlx_img);
+				render(game, px_x + 4, px_y + 6, game->texture.charac.mlx_img);
 			px_x = px_x + 25;
 			j++;
 		}
 		px_y = px_y + 25;
 		i++;
 	}
+	return (0);
 }
 
 char	*ft_strcpy(char *dest, char *src)

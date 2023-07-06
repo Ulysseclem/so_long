@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/06 11:48:42 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/06 14:21:02 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,22 +52,6 @@ void	img_pix_put(t_img *img, int x, int y, int color)
 
 /* The x and y coordinates of the rect corresponds to its upper left corner. */
 
-int render_rect(t_img *img, t_rect rect)
-{
-	int	i;
-	int j;
-
-	i = rect.y;
-	while (i < rect.y + rect.height)
-	{
-		j = rect.x;
-		while (j < rect.x + rect.width)
-			img_pix_put(img, j++, i, rect.color);
-		++i;
-	}
-	return (0);
-}
-
 void	render_background(t_img *img, int color)
 {
 	int	i;
@@ -81,15 +65,15 @@ void	render_background(t_img *img, int color)
 }
 
 
-int	handle_keypress(int key, t_data *data)
+int	handle_keypress(int key, t_game *game)
 {
 	static int j;
 
 	j = 30;
 	if (key == XK_Escape)
 	{
-		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-		data->win_ptr = NULL;
+		mlx_destroy_window(game->mlx_ptr, game->win_ptr);
+		game->win_ptr = NULL;
 	}
 	return (0);
 }
@@ -109,6 +93,63 @@ int	render(t_game *game, int x, int y, void *img)
 	return (0);
 }
 
+void move_dowm(t_game *game)
+{
+	if (game->map.map[game->map.start_y + 1][game->map.start_x] != '1')
+	{
+		game->map.map[game->map.start_y][game->map.start_x] = '0';
+		game->map.map[game->map.start_y + 1][game->map.start_x] = 'P';
+		game->map.start_y++;
+	}
+	return;
+}
+
+void move_up(t_game *game)
+{
+	if (game->map.map[game->map.start_y - 1][game->map.start_x] != '1')
+	{
+		game->map.map[game->map.start_y][game->map.start_x] = '0';
+		game->map.map[game->map.start_y - 1][game->map.start_x] = 'P';
+		game->map.start_y--;
+	}
+	return;
+}
+
+void move_left(t_game *game)
+{
+	if (game->map.map[game->map.start_y][game->map.start_x - 1] != '1')
+	{
+		game->map.map[game->map.start_y][game->map.start_x] = '0';
+		game->map.map[game->map.start_y][game->map.start_x - 1] = 'P';
+		game->map.start_x--;
+	}
+	return;
+}
+
+void move_right(t_game *game)
+{
+	if (game->map.map[game->map.start_y][game->map.start_x + 1] != '1')
+	{
+		game->map.map[game->map.start_y][game->map.start_x] = '0';
+		game->map.map[game->map.start_y][game->map.start_x + 1] = 'P';
+		game->map.start_x++;
+	}
+	return;
+}
+
+int	handle_input(int key, t_game *game)
+{
+	(void)game;
+	if (key == XK_Down)
+		move_dowm(game);
+	else if (key == XK_Up)
+		move_up(game);
+	else if (key == XK_Left)
+		move_left(game);
+	else if (key == XK_Right)
+		move_right(game);
+	return(0);
+}
 
 int	main(void)
 {
@@ -133,6 +174,8 @@ int	main(void)
 		game.texture.wall.mlx_img = mlx_xpm_file_to_image(game.mlx_ptr, "wall.xpm", &game.texture.wall.width, &game.texture.wall.height);
 		game.texture.wall2.mlx_img = mlx_xpm_file_to_image(game.mlx_ptr, "wall2.xpm", &game.texture.wall2.width, &game.texture.wall2.height);
 		game.texture.charac.mlx_img = mlx_xpm_file_to_image(game.mlx_ptr, "charac.xpm", &game.texture.charac.width, &game.texture.charac.height);
+		game.texture.gold.mlx_img = mlx_xpm_file_to_image(game.mlx_ptr, "gold.xpm", &game.texture.gold.width, &game.texture.gold.height);
+
 	
 	// mlx_pixel_put(data.mlx_ptr, data.win_ptr, 10, 10, WHITE_PIXEL);
 		
@@ -142,10 +185,10 @@ int	main(void)
 	// game.texture.charac.addr = mlx_get_data_addr(game.texture.charac.mlx_img, &game.texture.charac.bpp,
 	// 		&game.texture.charac.line_len, &game.texture.charac.endian);
 
-		map_print(&game);
-
-		mlx_loop_hook(game.mlx_ptr, &render, &game);
+		// map_print(&game);
+		mlx_key_hook (game.win_ptr, &handle_input, &game);
 		mlx_hook(game.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &game);
+		mlx_loop_hook(game.mlx_ptr, &map_print, &game);
 		mlx_loop(game.mlx_ptr);
 
 	
