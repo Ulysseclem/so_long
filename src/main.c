@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/05 22:58:06 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/06 11:48:42 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,6 @@ void	error_exit_free_map(char *str, t_map *map)
 	write(2, str, ft_strlen(str));
 	exit (0);
 }
-
-typedef struct s_test
-{
-	void	*mlx_ptr;
-	int width;
-	int height;
-}	t_test;
 
 void	img_pix_put(t_img *img, int x, int y, int color)
 {
@@ -101,24 +94,15 @@ int	handle_keypress(int key, t_data *data)
 	return (0);
 }
 
-int	render(t_data *data, int x, int y, int i)
+int	render(t_game *game, int x, int y, void *img)
 {
-	if (data->win_ptr == NULL)
+	if (game->win_ptr == NULL)
 		return (1);
 	// render_rect(&data->img, (t_rect){WINDOW_WIDTH - 100, WINDOW_HEIGHT - 100, 100, 100, GREEN_PIXEL});
 	// render_rect(&data->img, (t_rect){0, 0, 100, 100, RED_PIXEL});
 	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 50, 50);
 	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 100, 100);
-	if (i == 1)
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.wall.mlx_img, x, y);
-	if (i == 2)
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.wall2.mlx_img, x, y);
-	if (i == 0)
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.floor.mlx_img, x, y);
-	if (i == 9)
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.floor2.mlx_img, x, y);
-	if (i == 5)
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.charac.mlx_img, x, y);
+	mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, img, x, y);
 	// render_background(&data->texture.charac, WHITE_PIXEL);
 	// mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->texture.charac.mlx_img, i, 0);
 
@@ -128,50 +112,50 @@ int	render(t_data *data, int x, int y, int i)
 
 int	main(void)
 {
-	t_data	data;
+	// t_data	data;
+	t_game	game;
 	
-	(void)data.mlx_ptr;
-		t_test	bou;
-
+	map_test(&game);
 	
-		data.mlx_ptr = mlx_init();
-		if (data.mlx_ptr == NULL)
-			return (MLX_ERROR);
-		data.win_ptr = mlx_new_window(data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "my window");
-		if (data.win_ptr == NULL)
-		{
-			free(data.win_ptr);
-			return (MLX_ERROR);
-		}
+	game.mlx_ptr = mlx_init();
+	if (game.mlx_ptr == NULL)
+		return (MLX_ERROR);
+	game.win_ptr = mlx_new_window(game.mlx_ptr, game.map.x * 25, game.map.y * 30, "my window");
+	if (game.win_ptr == NULL)
+	{
+		free(game.win_ptr);
+		return (MLX_ERROR);
+	}
 
 	/* Setup texture to an image*/ 
-		data.texture.floor.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "Floors.xpm", &bou.width, &bou.height);
-		data.texture.floor2.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "Floors2.xpm", &bou.width, &bou.height);
-		data.texture.wall.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "wall.xpm", &bou.width, &bou.height);
-		data.texture.wall2.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "wall2.xpm", &bou.width, &bou.height);
-		data.texture.charac.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, "charac.xpm", &bou.width, &bou.height);
+		game.texture.floor.mlx_img = mlx_xpm_file_to_image(game.mlx_ptr, "Floors.xpm", &game.texture.floor.width, &game.texture.floor.height);
+		game.texture.floor2.mlx_img = mlx_xpm_file_to_image(game.mlx_ptr, "Floors2.xpm", &game.texture.floor2.width, &game.texture.floor2.height);
+		game.texture.wall.mlx_img = mlx_xpm_file_to_image(game.mlx_ptr, "wall.xpm", &game.texture.wall.width, &game.texture.wall.height);
+		game.texture.wall2.mlx_img = mlx_xpm_file_to_image(game.mlx_ptr, "wall2.xpm", &game.texture.wall2.width, &game.texture.wall2.height);
+		game.texture.charac.mlx_img = mlx_xpm_file_to_image(game.mlx_ptr, "charac.xpm", &game.texture.charac.width, &game.texture.charac.height);
 	
 	// mlx_pixel_put(data.mlx_ptr, data.win_ptr, 10, 10, WHITE_PIXEL);
 		
-	data.texture.floor.addr = mlx_get_data_addr(data.texture.floor.mlx_img, &data.texture.floor.bpp,
-			&data.texture.floor.line_len, &data.texture.floor.endian);
+	// game.texture.floor.addr = mlx_get_data_addr(game.texture.floor.mlx_img, &game.texture.floor.bpp,
+	// 		&game.texture.floor.line_len, &game.texture.floor.endian);
 	
-	data.texture.charac.addr = mlx_get_data_addr(data.texture.charac.mlx_img, &data.texture.charac.bpp,
-			&data.texture.charac.line_len, &data.texture.charac.endian);
-	map_test(data);
+	// game.texture.charac.addr = mlx_get_data_addr(game.texture.charac.mlx_img, &game.texture.charac.bpp,
+	// 		&game.texture.charac.line_len, &game.texture.charac.endian);
 
-		mlx_loop_hook(data.mlx_ptr, &render, &data);
-		mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
-		mlx_loop(data.mlx_ptr);
+		map_print(&game);
 
+		mlx_loop_hook(game.mlx_ptr, &render, &game);
+		mlx_hook(game.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &game);
+		mlx_loop(game.mlx_ptr);
 
+	
 
 
 	/* we will exit the loop if there's no window left, and execute this code */
-		mlx_destroy_image(data.mlx_ptr, data.texture.floor.mlx_img);
-		mlx_destroy_image(data.mlx_ptr, data.texture.charac.mlx_img);
-		mlx_destroy_display(data.mlx_ptr);
-		free(data.mlx_ptr);
+		mlx_destroy_image(game.mlx_ptr, game.texture.floor.mlx_img);
+		mlx_destroy_image(game.mlx_ptr, game.texture.charac.mlx_img);
+		mlx_destroy_display(game.mlx_ptr);
+		free(game.mlx_ptr);
 }
 
 

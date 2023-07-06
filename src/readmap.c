@@ -3,26 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   readmap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 10:35:25 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/05 22:57:47 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/06 11:41:24 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void map_test(t_data data)
+void map_test(t_game *game)
 {
 	t_map	map;
 	
-	(void)data.mlx_ptr;
 	map_init(&map);
 	map_size(&map);
 	map.map = map_cpy(map.map, map.y);
 	map_error(&map);
-	map_print(&map, data);
-	free_map(map.map, map.y);
+	game->map = map;
+	// free_map(map.map, map.y);
 }
 
 /* Pour connaitre la taille y de la carte */
@@ -52,7 +51,7 @@ void	map_size(t_map *map)
 	}
 	close(fd);
 }
-void map_print(t_map *map, t_data data)
+void map_print(t_game *game)
 {
 	int i;
 	int j;
@@ -61,24 +60,24 @@ void map_print(t_map *map, t_data data)
 
 	px_y = 0;
 	i = 0;
-	while (i < map->y)
+	while (i < game->map.y)
 	{
 		px_x = 0;
 		j = 0;
-		while (map->map[i][j])
+		while (game->map.map[i][j])
 		{
-			if (i > 0 && (map->map[i][j] == '0' && map->map[i - 1][j] == '1'))
+			if (i > 0 && (game->map.map[i][j] == '0' && game->map.map[i - 1][j] == '1'))
 			{
-				render(&data, px_x, (px_y + 18), 9);
+				render(game, px_x, (px_y + 18), game->texture.floor2.mlx_img);
 			}
-			else if (map->map[i][j] == '0')
-				render(&data, px_x, px_y, 0);
-			if ((i < (map->y - 1) && map->map[i][j] == '1' && map->map[i + 1][j] == '1'))
-				render(&data, px_x, px_y, 2);	
-			else if (map->map[i][j] == '1')
-				render(&data, px_x, px_y, 1);
-			else if (map->map[i][j] == 'P')
-				render(&data, px_x, px_y, 5);
+			else if (game->map.map[i][j] == '0')
+				render(game, px_x, px_y, game->texture.floor.mlx_img);
+			if ((i < (game->map.y - 1) && game->map.map[i][j] == '1' && game->map.map[i + 1][j] == '1'))
+				render(game, px_x, px_y, game->texture.wall2.mlx_img);	
+			else if (game->map.map[i][j] == '1')
+				render(game, px_x, px_y, game->texture.wall.mlx_img);
+			else if (game->map.map[i][j] == 'P')
+				render(game, px_x, px_y, game->texture.charac.mlx_img);
 			px_x = px_x + 25;
 			j++;
 		}

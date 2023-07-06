@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/05 22:59:23 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/06 11:48:36 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,6 @@ typedef struct s_map
 	int		start;
 }	t_map;
 
-typedef struct s_game
-{
-	void	*mlx_ptr;
-	void	*win_ptr;
-	t_map	map;	
-}	t_game
-
 typedef struct s_img
 {
 	void	*mlx_img;
@@ -63,6 +56,8 @@ typedef struct s_img
 	int		bpp; /* bits per pixel */
 	int		line_len;
 	int		endian;
+	int		height;
+	int		width;
 }	t_img;
 
 typedef struct s_textures
@@ -97,6 +92,14 @@ typedef struct s_pos
 	int	y;
 }	t_pos;
 
+typedef struct s_game
+{
+	void		*mlx_ptr;
+	void		*win_ptr;
+	t_map		map;
+	t_textures	texture;
+}	t_game;
+
 int main(void);
 
 char	*get_next_line(int fd);
@@ -111,14 +114,14 @@ char	*ft_strdup(const char *s);
 
 void	error_exit(char *str);
 void	error_exit_free_map(char *str, t_map *map);
-int	render(t_data *data, int x, int y, int i);
+int	render(t_game *game, int x, int y, void *img);
 
-void	map_test(t_data data);
+void	map_test(t_game *data);
 void	map_init(t_map *map);
 char	**map_cpy(char **map, int size);
 
 char	*ft_strcpy(char *dest, char *src);
-void 	map_print(t_map *map, t_data data);
+void 	map_print(t_game *data);
 void	map_size(t_map *map);
 void	free_map(char **map, int size);
 
