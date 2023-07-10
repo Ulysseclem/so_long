@@ -6,7 +6,7 @@
 /*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:04:57 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/05 22:38:59 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/07 13:32:43 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ void map_find_start(t_map *map)
 		{
 			if (map->map[i][j] == 'P')
 			{
-				map->start_x = i;
-				map->start_y = j;
+				map->start_x = j;
+				map->start_y = i;
 			}
 			j++;
 		}

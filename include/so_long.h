@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/06 14:20:42 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/10 22:06:29 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,50 @@ typedef struct s_img
 
 typedef struct s_textures
 {
-	t_img floor;
-	t_img floor2;
-	t_img wall;
-	t_img wall2;
-	t_img charac;
-	t_img gold;
+	t_img floor_dirt_1;
+	t_img floor_dirt_2;
+	t_img floor_dirt_1_half;
+	t_img floor_dirt_2_half;
+	t_img wall_all;
+	t_img wall_top;
+	t_img diamond_dirt_1;
+	t_img diamond_mid;
+	t_img diamond_top_wall;
+	t_img wall_all_diamond;
+	t_img charac_bot_dirt;
+	t_img charac_top_dirt;
+	t_img charac_top_dirt_left;
+	t_img charac_mid;
+	t_img charac_bot_dirt_left;
+	t_img charac_mid_left;
+	t_img charac_bot_diamond_left;
+	t_img charac_bot_diamond;
+
+	t_img floor_half;
+	
+	t_img charac_floor;
+	t_img charac_floor_half;
+	t_img charac_floor_head;
+	t_img charac_top_wall;
+
+	t_img charac_floor_left;
+	t_img charac_floor_half_left;
+	t_img charac_floor_head_left;
+	t_img charac_top_wall_left;
+
+	t_img diamond_floor;
+	t_img diamond_floor_half;
+	t_img diamond_floor_charac;
+	t_img diamond_floor_charac_left;
+
+	t_img exit;
+	t_img exit_charac;
+	t_img exit_charac_left;
+
+	int		height;
+	int		width;
+
+
 }	t_textures;
 
 typedef struct s_data
@@ -78,14 +116,6 @@ typedef struct s_data
 	int		cur_img;
 }	t_data;
 
-typedef struct s_rect
-{
-	int	x;
-	int	y;
-	int width;
-	int height;
-	int color;
-}	t_rect;
 
 typedef struct s_pos
 {
