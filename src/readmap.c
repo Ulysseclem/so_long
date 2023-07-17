@@ -6,7 +6,7 @@
 /*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 10:35:25 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/10 22:27:07 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/11 12:15:39 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,18 @@ int map_print(t_game *game)
 		while (game->map.map[i][j])
 		{
 			/*exit*/
-			if (game->map.map[i][j] == 'E' && game->map.map[i + 1][j] == 'P')
+			if (game->map.map[i][j] == 'E' && game->map.map[i + 1][j] == 'P' && game->map.nbr_C > 0)
+				render(game, px_x, (px_y + 28), game->texture.exit_lock_charac.mlx_img);
+			else if (game->map.map[i][j] == 'E' && game->map.map[i + 1][j] == 'L' && game->map.nbr_C > 0)
+				render(game, px_x, (px_y + 28), game->texture.exit_lock_charac_left.mlx_img);
+			else if (game->map.map[i][j] == 'E' && game->map.map[i + 1][j] != 'P' && game->map.map[i + 1][j] != 'L' && game->map.nbr_C > 0)
+				render(game, px_x, (px_y + 28), game->texture.exit_lock.mlx_img);
+
+			if (game->map.map[i][j] == 'E' && game->map.map[i + 1][j] == 'P' && game->map.nbr_C == 0)
 				render(game, px_x, (px_y + 28), game->texture.exit_charac.mlx_img);
-			else if (game->map.map[i][j] == 'E' && game->map.map[i + 1][j] == 'L')
+			else if (game->map.map[i][j] == 'E' && game->map.map[i + 1][j] == 'L' && game->map.nbr_C == 0)
 				render(game, px_x, (px_y + 28), game->texture.exit_charac_left.mlx_img);
-			else if (game->map.map[i][j] == 'E' && game->map.map[i + 1][j] != 'P' && game->map.map[i + 1][j] != 'L')
+			else if (game->map.map[i][j] == 'E' && game->map.map[i + 1][j] != 'P' && game->map.map[i + 1][j] != 'L' && game->map.nbr_C == 0)
 				render(game, px_x, (px_y + 28), game->texture.exit.mlx_img);
 			
 			/*floor*/
@@ -167,7 +174,9 @@ void	map_init(t_map *map)
 {
 	map->y = 0;
 	map->x = 0;
-	map->nbr_PE = 0;
+	map->nbr_P = 0;
+	map->nbr_E = 0;
+	map->nbr_C = 0;
 }
 
 char	**map_cpy(char **map, int size)

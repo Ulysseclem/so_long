@@ -6,7 +6,7 @@
 /*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/10 22:25:50 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/11 13:24:15 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,22 @@ int	render(t_game *game, int x, int y, void *img)
 
 void move_dowm(t_game *game)
 {
+	if (game->map.map[game->map.start_y + 1][game->map.start_x] == 'C')
+		game->map.nbr_C--;
+	if  (game->map.map[game->map.start_y + 1][game->map.start_x] == 'E' && game->map.nbr_C > 0)
+		return;
 	if (game->map.map[game->map.start_y + 1][game->map.start_x] != '1' && game->map.map[game->map.start_y][game->map.start_x] == 'L')
 	{
+		if (game->map.map[game->map.start_y + 1][game->map.start_x] == 'E')
+			end(game);
 		game->map.map[game->map.start_y][game->map.start_x] = '0';
 		game->map.map[game->map.start_y + 1][game->map.start_x] = 'L';
 		game->map.start_y++;
 	}
 	else if (game->map.map[game->map.start_y + 1][game->map.start_x] != '1')
 	{
+		if (game->map.map[game->map.start_y + 1][game->map.start_x] == 'E')
+			end(game);
 		game->map.map[game->map.start_y][game->map.start_x] = '0';
 		game->map.map[game->map.start_y + 1][game->map.start_x] = 'P';
 		game->map.start_y++;
@@ -72,14 +80,22 @@ void move_dowm(t_game *game)
 
 void move_up(t_game *game)
 {
+	if (game->map.map[game->map.start_y - 1][game->map.start_x] == 'C')
+			game->map.nbr_C--;
+	if  (game->map.map[game->map.start_y - 1][game->map.start_x] == 'E' && game->map.nbr_C > 0)
+		return;
 	if (game->map.map[game->map.start_y - 1][game->map.start_x] != '1' && game->map.map[game->map.start_y][game->map.start_x] == 'L')
 	{
+		if (game->map.map[game->map.start_y - 1][game->map.start_x] == 'E')
+			end(game);
 		game->map.map[game->map.start_y][game->map.start_x] = '0';
 		game->map.map[game->map.start_y - 1][game->map.start_x] = 'L';
 		game->map.start_y--;
 	}
 	else if (game->map.map[game->map.start_y - 1][game->map.start_x] != '1')
 	{
+		if (game->map.map[game->map.start_y - 1][game->map.start_x] == 'E')
+			end(game);
 		game->map.map[game->map.start_y][game->map.start_x] = '0';
 		game->map.map[game->map.start_y - 1][game->map.start_x] = 'P';
 		game->map.start_y--;
@@ -89,8 +105,14 @@ void move_up(t_game *game)
 
 void move_left(t_game *game)
 {
+	if (game->map.map[game->map.start_y][game->map.start_x - 1] == 'C')
+		game->map.nbr_C--;
+	if  (game->map.map[game->map.start_y][game->map.start_x - 1] == 'E' && game->map.nbr_C > 0)
+		return;
 	if (game->map.map[game->map.start_y][game->map.start_x - 1] != '1')
 	{
+		if (game->map.map[game->map.start_y][game->map.start_x - 1] == 'E')
+			end(game);
 		game->map.map[game->map.start_y][game->map.start_x] = '0';
 		game->map.map[game->map.start_y][game->map.start_x - 1] = 'L';
 		game->map.start_x--;
@@ -100,8 +122,14 @@ void move_left(t_game *game)
 
 void move_right(t_game *game)
 {
+	if (game->map.map[game->map.start_y][game->map.start_x + 1] == 'C')
+		game->map.nbr_C--;
+	if  (game->map.map[game->map.start_y][game->map.start_x + 1] == 'E' && game->map.nbr_C > 0)
+		return;
 	if (game->map.map[game->map.start_y][game->map.start_x + 1] != '1')
 	{
+		if (game->map.map[game->map.start_y][game->map.start_x + 1] == 'E')
+			end(game);
 		game->map.map[game->map.start_y][game->map.start_x] = '0';
 		game->map.map[game->map.start_y][game->map.start_x + 1] = 'P';
 		game->map.start_x++;
@@ -144,15 +172,6 @@ void load_asset(t_textures *texture, t_game *game)
 	texture->charac_top_wall.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
 	"xpm/charac_top_wall.xpm", &texture->width, &texture->height);
 
-	texture->charac_floor.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_floor.xpm", &texture->width, &texture->height);
-	texture->charac_floor_half.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_floor_half.xpm", &texture->width, &texture->height);
-	texture->charac_floor_head.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_floor_head.xpm", &texture->width, &texture->height);
-	texture->charac_top_wall.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_top_wall.xpm", &texture->width, &texture->height);
-
 	texture->charac_floor_left.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
 	"xpm/charac_floor_left.xpm", &texture->width, &texture->height);
 	texture->charac_floor_half_left.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
@@ -177,6 +196,29 @@ void load_asset(t_textures *texture, t_game *game)
 	"xpm/exit_charac.xpm", &texture->width, &texture->height);
 	texture->exit_charac_left.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
 	"xpm/exit_charac_left.xpm", &texture->width, &texture->height);
+
+	texture->exit_lock.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
+	"xpm/exit_lock.xpm", &texture->width, &texture->height);
+	texture->exit_lock_charac.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
+	"xpm/exit_lock_charac.xpm", &texture->width, &texture->height);
+	texture->exit_lock_charac_left.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
+	"xpm/exit_lock_charac_left.xpm", &texture->width, &texture->height);
+}
+
+
+void end(t_game *game)
+{
+	mlx_destroy_image(game->mlx_ptr, game->texture.floor_dirt_1.mlx_img);
+	mlx_destroy_image(game->mlx_ptr, game->texture.floor_half.mlx_img);
+	mlx_destroy_image(game->mlx_ptr, game->texture.wall_all.mlx_img);
+	mlx_destroy_image(game->mlx_ptr, game->texture.wall_top.mlx_img);
+	mlx_destroy_image(game->mlx_ptr, game->texture.charac_floor.mlx_img);
+	mlx_destroy_image(game->mlx_ptr, game->texture.charac_floor_head.mlx_img);
+	mlx_destroy_image(game->mlx_ptr, game->texture.diamond_floor.mlx_img);
+	mlx_destroy_image(game->mlx_ptr, game->texture.exit.mlx_img);
+	mlx_destroy_window(game->mlx_ptr, game->win_ptr);
+	// mlx_destroy_display(game->mlx_ptr);
+	game->win_ptr = NULL;
 }
 
 int	main(void)
@@ -202,10 +244,7 @@ int	main(void)
 	mlx_loop_hook(game.mlx_ptr, &map_print, &game);
 	mlx_loop(game.mlx_ptr);
 
-	/* we will exit the loop if there's no window left, and execute this code */
-		// mlx_destroy_image(game.mlx_ptr, game.texture.charac_floor_1.mlx_img);
-		mlx_destroy_display(game.mlx_ptr);
-		free(game.mlx_ptr);
+	free(game.mlx_ptr);
 }
 
 

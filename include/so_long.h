@@ -6,7 +6,7 @@
 /*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/10 22:06:29 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/11 12:54:55 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ typedef struct s_map
 	int		y;
 	int		start_x;
 	int		start_y;
-	int		nbr_PE;
+	int		nbr_E;
+	int		nbr_P;
 	int		nbr_C;
 	int		start;
 }	t_map;
@@ -102,6 +103,10 @@ typedef struct s_textures
 	t_img exit_charac;
 	t_img exit_charac_left;
 
+	t_img exit_lock;
+	t_img exit_lock_charac;
+	t_img exit_lock_charac_left;
+
 	int		height;
 	int		width;
 
@@ -146,6 +151,7 @@ char	*ft_strdup(const char *s);
 void	error_exit(char *str);
 void	error_exit_free_map(char *str, t_map *map);
 int		render(t_game *game, int x, int y, void *img);
+void	end(t_game *game);
 
 void	map_test(t_game *data);
 void	map_init(t_map *map);
@@ -157,6 +163,7 @@ void	map_size(t_map *map);
 void	free_map(char **map, int size);
 
 void	map_error(t_map *map);
+void map_error_tiles(char tile, t_map *map);
 void 	map_is_possible(t_map *map);
 void	map_flood(char **map, int x, int y);
 void 	map_find_start(t_map *map);
