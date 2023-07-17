@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/11 13:24:15 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/17 16:55:24 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,234 +18,97 @@
 #include <X11/keysym.h>
 #include <mlx.h>
 
-
-void	error_exit(char *str)
-{
-	write(2, str, ft_strlen(str));
-	exit (0);
-}
-void	error_exit_free_map(char *str, t_map *map)
-{
-	free_map(map->map, map->y);
-	write(2, str, ft_strlen(str));
-	exit (0);
-}
-
-int	handle_keypress(int key, t_game *game)
-{
-	static int j;
-
-	j = 30;
-	if (key == XK_Escape)
-	{
-		mlx_destroy_window(game->mlx_ptr, game->win_ptr);
-		game->win_ptr = NULL;
-	}
-	return (0);
-}
-
 int	render(t_game *game, int x, int y, void *img)
 {
 	if (game->win_ptr == NULL)
 		return (1);
 	mlx_put_image_to_window(game->mlx_ptr, game->win_ptr, img, x, y);
-
 	return (0);
 }
 
-void move_dowm(t_game *game)
+t_pixel	*img_get_pixel(t_img *img, int x, int y)
 {
-	if (game->map.map[game->map.start_y + 1][game->map.start_x] == 'C')
-		game->map.nbr_C--;
-	if  (game->map.map[game->map.start_y + 1][game->map.start_x] == 'E' && game->map.nbr_C > 0)
-		return;
-	if (game->map.map[game->map.start_y + 1][game->map.start_x] != '1' && game->map.map[game->map.start_y][game->map.start_x] == 'L')
-	{
-		if (game->map.map[game->map.start_y + 1][game->map.start_x] == 'E')
-			end(game);
-		game->map.map[game->map.start_y][game->map.start_x] = '0';
-		game->map.map[game->map.start_y + 1][game->map.start_x] = 'L';
-		game->map.start_y++;
-	}
-	else if (game->map.map[game->map.start_y + 1][game->map.start_x] != '1')
-	{
-		if (game->map.map[game->map.start_y + 1][game->map.start_x] == 'E')
-			end(game);
-		game->map.map[game->map.start_y][game->map.start_x] = '0';
-		game->map.map[game->map.start_y + 1][game->map.start_x] = 'P';
-		game->map.start_y++;
-	}
-	return;
-}
-
-void move_up(t_game *game)
-{
-	if (game->map.map[game->map.start_y - 1][game->map.start_x] == 'C')
-			game->map.nbr_C--;
-	if  (game->map.map[game->map.start_y - 1][game->map.start_x] == 'E' && game->map.nbr_C > 0)
-		return;
-	if (game->map.map[game->map.start_y - 1][game->map.start_x] != '1' && game->map.map[game->map.start_y][game->map.start_x] == 'L')
-	{
-		if (game->map.map[game->map.start_y - 1][game->map.start_x] == 'E')
-			end(game);
-		game->map.map[game->map.start_y][game->map.start_x] = '0';
-		game->map.map[game->map.start_y - 1][game->map.start_x] = 'L';
-		game->map.start_y--;
-	}
-	else if (game->map.map[game->map.start_y - 1][game->map.start_x] != '1')
-	{
-		if (game->map.map[game->map.start_y - 1][game->map.start_x] == 'E')
-			end(game);
-		game->map.map[game->map.start_y][game->map.start_x] = '0';
-		game->map.map[game->map.start_y - 1][game->map.start_x] = 'P';
-		game->map.start_y--;
-	}
-	return;
-}
-
-void move_left(t_game *game)
-{
-	if (game->map.map[game->map.start_y][game->map.start_x - 1] == 'C')
-		game->map.nbr_C--;
-	if  (game->map.map[game->map.start_y][game->map.start_x - 1] == 'E' && game->map.nbr_C > 0)
-		return;
-	if (game->map.map[game->map.start_y][game->map.start_x - 1] != '1')
-	{
-		if (game->map.map[game->map.start_y][game->map.start_x - 1] == 'E')
-			end(game);
-		game->map.map[game->map.start_y][game->map.start_x] = '0';
-		game->map.map[game->map.start_y][game->map.start_x - 1] = 'L';
-		game->map.start_x--;
-	}
-	return;
-}
-
-void move_right(t_game *game)
-{
-	if (game->map.map[game->map.start_y][game->map.start_x + 1] == 'C')
-		game->map.nbr_C--;
-	if  (game->map.map[game->map.start_y][game->map.start_x + 1] == 'E' && game->map.nbr_C > 0)
-		return;
-	if (game->map.map[game->map.start_y][game->map.start_x + 1] != '1')
-	{
-		if (game->map.map[game->map.start_y][game->map.start_x + 1] == 'E')
-			end(game);
-		game->map.map[game->map.start_y][game->map.start_x] = '0';
-		game->map.map[game->map.start_y][game->map.start_x + 1] = 'P';
-		game->map.start_x++;
-	}
-	return;
-}
-
-int	handle_input(int key, t_game *game)
-{
-	(void)game;
-	if (key == XK_Down)
-		move_dowm(game);
-	else if (key == XK_Up)
-		move_up(game);
-	else if (key == XK_Left)
-		move_left(game);
-	else if (key == XK_Right)
-		move_right(game);
-	return(0);
+	return (img->addr + y * img->width + x);
 }
 
 void load_asset(t_textures *texture, t_game *game)
 {
-	texture->floor_dirt_1.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/floor_dirt_1.xpm", &texture->width, &texture->height);
-	texture->floor_half.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/floor_half.xpm", &texture->width, &texture->height);
+	void	*mlx;
 
-	texture->wall_all.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/wall_all.xpm", &texture->width, &texture->height);
-	texture->wall_top.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/wall_top.xpm", &texture->width, &texture->height);
-
-	texture->charac_floor.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_floor.xpm", &texture->width, &texture->height);
-	texture->charac_floor_half.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_floor_half.xpm", &texture->width, &texture->height);
-	texture->charac_floor_head.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_floor_head.xpm", &texture->width, &texture->height);
-	texture->charac_top_wall.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_top_wall.xpm", &texture->width, &texture->height);
-
-	texture->charac_floor_left.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_floor_left.xpm", &texture->width, &texture->height);
-	texture->charac_floor_half_left.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_floor_half_left.xpm", &texture->width, &texture->height);
-	texture->charac_floor_head_left.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_floor_head_left.xpm", &texture->width, &texture->height);
-	texture->charac_top_wall_left.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/charac_top_wall_left.xpm", &texture->width, &texture->height);
-
-	texture->diamond_floor.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/diamond_floor.xpm", &texture->width, &texture->height);
-	texture->diamond_floor_half.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/diamond_floor_half.xpm", &texture->width, &texture->height);
-	texture->diamond_floor_charac.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/diamond_floor_charac.xpm", &texture->width, &texture->height);
-	texture->diamond_floor_charac_left.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/diamond_floor_charac_left.xpm", &texture->width, &texture->height);
-	
-	texture->exit.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/exit.xpm", &texture->width, &texture->height);
-	texture->exit_charac.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/exit_charac.xpm", &texture->width, &texture->height);
-	texture->exit_charac_left.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/exit_charac_left.xpm", &texture->width, &texture->height);
-
-	texture->exit_lock.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/exit_lock.xpm", &texture->width, &texture->height);
-	texture->exit_lock_charac.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/exit_lock_charac.xpm", &texture->width, &texture->height);
-	texture->exit_lock_charac_left.mlx_img = mlx_xpm_file_to_image(game->mlx_ptr, \
-	"xpm/exit_lock_charac_left.xpm", &texture->width, &texture->height);
+	mlx = game->mlx_ptr;
+	texture->wall_all = init_image(mlx, WALL);
+	texture->wall_top = init_image(mlx, WALL_TOP);
+	texture->floor_dirt_1 = init_image(mlx, FLOOR);
+	(*img_get_pixel(&texture->floor_dirt_1, 47, 47)) = (t_pixel){.r = 255};
+	texture->floor_half = init_image(mlx, FLOOR_H);
+	texture->charac_floor = init_image(mlx, CHARAC);
+	texture->charac_floor_half = init_image(mlx, CHARAC_H);
+	texture->charac_floor_head = init_image(mlx, CHARAC_TOP);
+	texture->charac_top_wall = init_image(mlx, CHARAC_TOP_W);
+	texture->charac_floor_left = init_image(mlx, CHARAC_L);
+	texture->charac_floor_half_left = init_image(mlx, CHARAC_H_L);
+	texture->charac_floor_head_left = init_image(mlx, CHARAC_TOP_L);
+	texture->charac_top_wall_left = init_image(mlx, CHARAC_TOP_W_L);
+	texture->diamond_floor = init_image(mlx, DIAMOND);
+	texture->diamond_floor_half = init_image(mlx, DIAMOND_H);
+	texture->diamond_floor_charac = init_image(mlx, DIAMOND_C);
+	texture->diamond_floor_charac_left = init_image(mlx, DIAMOND_C_L);
+	texture->exit = init_image(mlx, EXIT);
+	texture->exit_charac = init_image(mlx, EXIT_C);
+	texture->exit_charac_left = init_image(mlx, EXIT_C_L);
+	texture->exit_lock = init_image(mlx, EXIT_LCK);
+	texture->exit_lock_charac = init_image(mlx, EXIT_LCK_C);
+	texture->exit_lock_charac_left = init_image(mlx, EXIT_LCK_C_L);
 }
 
-
-void end(t_game *game)
+t_img	init_image(void *mlx, char *path)
 {
-	mlx_destroy_image(game->mlx_ptr, game->texture.floor_dirt_1.mlx_img);
-	mlx_destroy_image(game->mlx_ptr, game->texture.floor_half.mlx_img);
-	mlx_destroy_image(game->mlx_ptr, game->texture.wall_all.mlx_img);
-	mlx_destroy_image(game->mlx_ptr, game->texture.wall_top.mlx_img);
-	mlx_destroy_image(game->mlx_ptr, game->texture.charac_floor.mlx_img);
-	mlx_destroy_image(game->mlx_ptr, game->texture.charac_floor_head.mlx_img);
-	mlx_destroy_image(game->mlx_ptr, game->texture.diamond_floor.mlx_img);
-	mlx_destroy_image(game->mlx_ptr, game->texture.exit.mlx_img);
-	mlx_destroy_window(game->mlx_ptr, game->win_ptr);
-	// mlx_destroy_display(game->mlx_ptr);
-	game->win_ptr = NULL;
+	t_img	img;
+
+	img.mlx_img = mlx_xpm_file_to_image(mlx, path, &img.width, &img.height);
+	if (img.mlx_img == NULL)
+		error_exit("xpm non trouve");
+	img.addr = (t_pixel *) mlx_get_data_addr(img.mlx_img,
+			&img.bpp, &img.line_len, &img.endian);
+	return (img);
 }
 
-int	main(void)
+int check_file(int ac, char *av)
 {
-	// t_data	data;
+	int i;
+
+	i = 0;
+	if (ac != 2)
+		return (1);
+	while (av[i] != 0)
+		i++;
+	if (ft_strncmp(&av[i - 4], ".ber", 4 != 0))
+		return (1);
+	return (0);
+}
+
+int	main(int ac, char **av)
+{
 	t_game	game;
-	
+
+	if (check_file(ac, av[1]) != 0)
+		return (0);
+	map_init(&game);
+	game.map.map_name = (av[1]);
 	map_test(&game);
 	game.mlx_ptr = mlx_init();
 	if (game.mlx_ptr == NULL)
 		return (MLX_ERROR);
-	game.win_ptr = mlx_new_window(game.mlx_ptr, game.map.x * 50, game.map.y * 50, "my window");
+	game.win_ptr = mlx_new_window(game.mlx_ptr, game.map.px_x, \
+	game.map.px_y, "so_long");
 	if (game.win_ptr == NULL)
 	{
 		free(game.win_ptr);
 		return (MLX_ERROR);
 	}
-	/* Setup texture to an image*/
 	load_asset(&game.texture, &game);
-	
 	mlx_key_hook (game.win_ptr, &handle_input, &game);
 	mlx_hook(game.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &game);
 	mlx_loop_hook(game.mlx_ptr, &map_print, &game);
 	mlx_loop(game.mlx_ptr);
-
-	free(game.mlx_ptr);
 }
-
-
-/* gerer BUG SI CARTE PlUS GRANDE QUE ECRAN*/

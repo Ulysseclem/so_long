@@ -33,7 +33,10 @@ SRCS        := main.c \
 			get_next_line_utils.c \
 			get_next_line.c \
 			readmap.c \
-			map_error.c
+			map_error.c \
+			ft_printf.c \
+			move.c \
+			end_game.c
 
 SRCS        := $(SRCS:%=$(SRC_DIR)/%)
 BUILD_DIR   := .build
@@ -85,7 +88,7 @@ $(LIBS_TARGET):
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	$(DIR_DUP)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -Imlx_linux -O3 -c -o $@ $<
-	$(info CREATED $@)
+# $(info CREATED $@)
 
 -include $(DEPS)
 

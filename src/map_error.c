@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_error.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:04:57 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/11 11:56:35 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/17 15:51:53 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void map_is_possible(t_map *map)
 	char **map_bis;
 	map_find_start(map);
 	map_bis = 0;
-	map_bis = map_cpy(map_bis, map->y);
+	map_bis = map_cpy(map, map_bis);
 	map_flood(map_bis, map->start_x, map->start_y);
 	i = 0;
 	while (i < map->y)
@@ -74,13 +74,7 @@ void map_is_possible(t_map *map)
 			free_map(map_bis, map->y);
 			error_exit_free_map("error : Exit unreachable", map);
 		}
-	// // print test
-	// while (i < map->y)
-	// {
-	// 	printf("F%c = %s\n", i, map->map[i]);
-	// 	i++;
-	// }
-	// free_map(map_bis, map->y);
+	free_map(map_bis, map->y);
 
 
 }

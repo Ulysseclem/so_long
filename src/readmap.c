@@ -3,25 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   readmap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
+/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 10:35:25 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/11 12:15:39 by ulysse           ###   ########.fr       */
+/*   Updated: 2023/07/17 14:15:42 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
 void map_test(t_game *game)
-{
-	t_map	map;
-	
-	map_init(&map);
-	map_size(&map);
-	map.map = map_cpy(map.map, map.y);
-	map_error(&map);
-	game->map = map;
-	// free_map(map.map, map.y);
+{	
+	map_size(&game->map);
+	game->map.map = map_cpy(&game->map, game->map.map);
+	map_error(&game->map);
 }
 
 /* Pour connaitre la taille y de la carte */
@@ -30,14 +25,14 @@ void	map_size(t_map *map)
 {
 	int		fd;
 	char	*line;
-	fd = open("map/map.ber", O_RDONLY);
+	fd = open(map->map_name, O_RDONLY);
 	while (1)
 	{
 		line = get_next_line(fd);
 		if (line == NULL && map->y == 0)
 		{	
 			free(line);
-			error_exit("error: empty map\n");
+			error_exit("error: no map / empty map\n");
 			break ;
 		}
 		if (line == NULL)
@@ -49,6 +44,8 @@ void	map_size(t_map *map)
 		free(line);
 		map->y++;
 	}
+	map->px_x = map->x * 48;
+	map->px_y = map->y * 48 + 28;
 	close(fd);
 }
 int map_print(t_game *game)
@@ -170,25 +167,26 @@ void free_map(char **map, int size)
 	free(map);
 }
 
-void	map_init(t_map *map)
+void	map_init(t_game *game)
 {
-	map->y = 0;
-	map->x = 0;
-	map->nbr_P = 0;
-	map->nbr_E = 0;
-	map->nbr_C = 0;
+	game->map.y = 0;
+	game->map.x = 0;
+	game->map.nbr_P = 0;
+	game->map.nbr_E = 0;
+	game->map.nbr_C = 0;
+	game->map.count_move = 0;
 }
 
-char	**map_cpy(char **map, int size)
+char	**map_cpy(t_map *map, char **mappy)
 {
 	int 	fd;
 	char	*line;
 	int		i;
 	
-	map = malloc(sizeof(char *) * size);
-	if (!map)
+	mappy = malloc(sizeof(char *) * map->y);
+	if (!mappy)
 		return (0);
-	fd = open("map/map.ber", O_RDONLY);
+	fd = open(map->map_name, O_RDONLY);
 	i = 0;
 	while (1)
 	{
@@ -198,11 +196,11 @@ char	**map_cpy(char **map, int size)
 			free(line);
 			break ;
 		}
-		map[i] = ft_strcpy(map[i], line);
+		mappy[i] = ft_strcpy(mappy[i], line);
 		// printf("L: %s\n", map.map[i]);
 		free(line);
 		i++;
 	}
 	close(fd);
-	return (map);
+	return (mappy);
 }
