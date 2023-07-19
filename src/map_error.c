@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:04:57 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/17 15:51:53 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/19 11:43:00 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	map_error(t_map *map)
 {
 	int	i;
 	int	j;
-	
+
 	if (map->y == map->x || (map->x < 3 && map->y < 3) || map->x * map->y < 14)
 		error_exit_free_map("error : wrong map size\n", map);
 	i = 0;
@@ -24,7 +24,7 @@ void	map_error(t_map *map)
 	{
 		j = 0;
 		if (ft_strlen(map->map[i]) != (size_t)map->x)
-				error_exit_free_map("error : wrong row lengh\n", map);
+			error_exit_free_map("error : wrong row lengh\n", map);
 		while (map->map[i][j] != '\0')
 		{
 			map_error_tiles(map->map[i][j], map);
@@ -32,78 +32,50 @@ void	map_error(t_map *map)
 		}
 		i++;
 	}
-	if (map->nbr_P + map->nbr_E != 2)
+	if (map->nbr_p + map->nbr_e != 2)
 		error_exit_free_map("error : wrong nbr of Charac/Exit\n", map);
-	if (map->nbr_C == 0)
+	if (map->nbr_c == 0)
 		error_exit_free_map("error : no collectibles in the map\n", map);
 	map_is_possible(map);
 }
 
-void map_error_tiles(char tile, t_map *map)
+void	map_error_tiles(char tile, t_map *map)
 {
-	if (tile != '0' && tile != '1' && tile!= 'C' && tile != 'E' && tile != 'P')
+	if (tile != '0' && tile != '1' && tile != 'C' && tile != 'E' && tile != 'P')
 		error_exit_free_map("error : issues with map tiles\n", map);
 	if (tile == 'P')
-			map->nbr_P++;
+			map->nbr_p++;
 	if (tile == 'E')
-			map->nbr_E++;
+			map->nbr_e++;
 	if (tile == 'C')
-			map->nbr_C++;
-	if (map->nbr_E > 1 || map->nbr_P > 1)
+			map->nbr_c++;
+	if (map->nbr_e > 1 || map->nbr_p > 1)
 		error_exit_free_map("error : wrong nbr of Charac/Exit\n", map);
 
 }
 
-void map_is_possible(t_map *map)
+void	map_is_possible(t_map *map)
 {
-	int i;
+	int		i;
+	char	**map_bis;
 
-	char **map_bis;
 	map_find_start(map);
 	map_bis = 0;
 	map_bis = map_cpy(map, map_bis);
 	map_flood(map_bis, map->start_x, map->start_y);
 	i = 0;
-	while (i < map->y)
-	{
-		printf("B%c = %s\n", i, map_bis[i]);
-		i++;
-	}
 	if (map_flood_check(map_bis, map->y) == 1)
-		{
-			free_map(map_bis, map->y);
-			error_exit_free_map("error : Exit unreachable", map);
-		}
-	free_map(map_bis, map->y);
-
-
-}
-
-void map_find_start(t_map *map)
-{
-	int i;
-	int	j;
-	
-	i = 0;
-	while (i < map->y)
 	{
-		j = 0;
-		while (map->map[i][j])
-		{
-			if (map->map[i][j] == 'P')
-			{
-				map->start_x = j;
-				map->start_y = i;
-			}
-			j++;
-		}
-		i++;
+		free_map(map_bis, map->y);
+		error_exit_free_map("error : Exit unreachable", map);
 	}
+	free_map(map_bis, map->y);
 }
 
-void map_flood(char **map, int x, int y)
+void	map_flood(char **map, int x, int y)
 {	
-	if (map[y][x] == 'C' || map[y][x] == '0' || map[y][x] == 'E' || map[y][x] == 'P')
+	if (map[y][x] == 'C' || map[y][x] == '0' \
+	|| map[y][x] == 'E' || map[y][x] == 'P')
 	{
 		map[y][x] = 'X';
 		map_flood(map, x + 1, y);
@@ -115,10 +87,10 @@ void map_flood(char **map, int x, int y)
 
 int	map_flood_check(char **map, int size)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
-	i =0;
+	i = 0;
 	while (i < size)
 	{
 		j = 0;

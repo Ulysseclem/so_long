@@ -30,14 +30,17 @@ INCS        := include    \
 	lib/libft/include   \
 
 SRC_DIR     := src
-SRCS        := main.c \
+SRCS        := so_long.c \
 			get_next_line_utils.c \
 			get_next_line.c \
-			readmap.c \
+			map_read.c \
 			map_error.c \
 			ft_printf.c \
 			move.c \
-			end_game.c
+			end_game.c \
+			map_print.c \
+			image_render.c \
+			utils.c
 
 SRCS        := $(SRCS:%=$(SRC_DIR)/%)
 BUILD_DIR   := .build

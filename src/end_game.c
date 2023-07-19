@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/17 16:18:49 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/19 11:07:10 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@ void	error_exit_free_map(char *str, t_map *map)
 
 int	handle_keypress(int key, t_game *game)
 {
-	static int j;
-
-	j = 30;
 	if (key == XK_Escape)
 		end(game);
 	return (0);
@@ -61,7 +58,7 @@ void	free_assets(void *ptr, t_textures *texture)
 	mlx_destroy_image(ptr, texture->wall_top.mlx_img);
 }
 
-void end(t_game *game)
+void	end(t_game *game)
 {
 	free_assets(game->mlx_ptr, &game->texture);
 	free_map(game->map.map, game->map.y);
