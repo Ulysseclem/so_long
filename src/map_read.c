@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 10:35:25 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/19 17:25:57 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/19 17:34:53 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	map_size(t_map *map)
 		if (line == NULL && map->y == 0)
 		{	
 			free(line);
+			close(fd);
 			error_exit("error: no map / empty map\n");
-			break ;
 		}
 		if (line == NULL)
 		{	
