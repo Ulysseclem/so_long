@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 11:03:27 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/17 10:38:17 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/19 11:56:35 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	ft_which(const char *str, va_list args)
 		return (0);
 	return (len);
 }
-
 
 int	ft_printf(const char *str, ...)
 {

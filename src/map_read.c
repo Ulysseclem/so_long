@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 10:35:25 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/19 11:29:37 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/19 17:25:57 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	map_read(t_game *game)
 	game->map.map = map_cpy(&game->map, game->map.map);
 	map_error(&game->map);
 }
-
-/* Pour connaitre la taille y de la carte */
 
 void	map_size(t_map *map)
 {
@@ -95,4 +93,26 @@ void	map_find_start(t_map *map)
 		}
 		i++;
 	}
+}
+
+void	map_find_diamond(t_map *map)
+{
+	int	i;
+	int	j;
+	int	d;
+
+	d = 0;
+	i = 0;
+	while (i < map->y)
+	{
+		j = 0;
+		while (map->map[i][j])
+		{
+			if (map->map[i][j] == 'C')
+				d++;
+			j++;
+		}
+		i++;
+	}
+	map->nbr_c = d;
 }

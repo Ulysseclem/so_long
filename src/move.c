@@ -6,76 +6,75 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:04:59 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/19 11:19:33 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/19 17:26:54 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	move_dowm(t_map *map, t_game *game)
+void	move_dowm(t_map *map, t_game *game)
 {
-	if (map->map[map->start_y + 1][map->start_x] == 'C')
-		map->nbr_c--;
+	if (map->map[map->start_y + 1][map->start_x] == '1')
+		return ;
 	if (map->map[map->start_y + 1][map->start_x] == 'E' && map->nbr_c > 0)
-		return (0);
+	{
+		if (map->map[map->start_y + 2][map->start_x] == '1')
+			return ;
+		if (map->map[map->start_y][map->start_x] == 'L')
+			map->map[map->start_y + 2][map->start_x] = 'L';
+		else if (map->map[map->start_y][map->start_x] == 'P')
+			map->map[map->start_y + 2][map->start_x] = 'P';
+		map->map[map->start_y][map->start_x] = '0';
+		map->start_y = map->start_y + 2;
+		return ;
+	}
+	if (map->map[map->start_y + 1][map->start_x] == 'E')
+		end(game);
 	if (map->map[map->start_y + 1][map->start_x] != '1' && \
 	map->map[map->start_y][map->start_x] == 'L')
-	{
-		if (map->map[map->start_y + 1][map->start_x] == 'E')
-			end(game);
-		map->map[map->start_y][map->start_x] = '0';
-		map->map[map->start_y + 1][map->start_x] = 'L';
-		map->start_y++;
-	}
+	map->map[map->start_y + 1][map->start_x] = 'L';
 	else if (map->map[map->start_y + 1][map->start_x] != '1')
-	{
-		if (map->map[map->start_y + 1][map->start_x] == 'E')
-			end(game);
-		map->map[map->start_y][map->start_x] = '0';
 		map->map[map->start_y + 1][map->start_x] = 'P';
-		map->start_y++;
-	}
-	else
-		return (0);
-	map->count_move++;
-	return (1);
+	map->map[map->start_y][map->start_x] = '0';
+	map->start_y++;
 }
 
-int	move_up(t_map *map, t_game *game)
+void	move_up(t_map *map, t_game *game)
 {
-	if (map->map[map->start_y - 1][map->start_x] == 'C')
-			map->nbr_c--;
+	if (map->map[map->start_y - 1][map->start_x] == '1')
+		return ;
 	if (map->map[map->start_y - 1][map->start_x] == 'E' && map->nbr_c > 0)
-		return (0);
+	{
+		if (map->map[map->start_y - 2][map->start_x] == '1')
+			return ;
+		if (map->map[map->start_y][map->start_x] == 'L')
+			map->map[map->start_y - 2][map->start_x] = 'L';
+		else if (map->map[map->start_y][map->start_x] == 'P')
+			map->map[map->start_y - 2][map->start_x] = 'P';
+		map->map[map->start_y][map->start_x] = '0';
+		map->start_y = map->start_y - 2;
+		return ;
+	}
+	if (map->map[map->start_y - 1][map->start_x] == 'E' && map->nbr_c == 0)
+		end(game);
 	if (map->map[map->start_y - 1][map->start_x] != '1' && \
 	map->map[map->start_y][map->start_x] == 'L')
-	{
-		if (map->map[map->start_y - 1][map->start_x] == 'E')
-			end(game);
-		map->map[map->start_y][map->start_x] = '0';
 		map->map[map->start_y - 1][map->start_x] = 'L';
-		map->start_y--;
-	}
 	else if (map->map[map->start_y - 1][map->start_x] != '1')
-	{
-		if (map->map[map->start_y - 1][map->start_x] == 'E')
-			end(game);
-		map->map[map->start_y][map->start_x] = '0';
 		map->map[map->start_y - 1][map->start_x] = 'P';
-		map->start_y--;
-	}
-	else
-		return (0);
-	map->count_move++;
-	return (1);
+	map->map[map->start_y][map->start_x] = '0';
+	map->start_y--;
 }
 
-int	move_left(t_map *map, t_game *game)
+void	move_left(t_map *map, t_game *game)
 {
-	if (map->map[map->start_y][map->start_x - 1] == 'C')
-		map->nbr_c--;
 	if (map->map[map->start_y][map->start_x - 1] == 'E' && map->nbr_c > 0)
-		return (0);
+	{
+		map->map[map->start_y][map->start_x] = '0';
+		map->map[map->start_y][map->start_x - 2] = 'L';
+		map->start_x = map->start_x - 2;
+		return ;
+	}
 	if (map->map[map->start_y][map->start_x - 1] != '1')
 	{
 		if (map->map[map->start_y][map->start_x - 1] == 'E')
@@ -84,47 +83,44 @@ int	move_left(t_map *map, t_game *game)
 		map->map[map->start_y][map->start_x - 1] = 'L';
 		map->start_x--;
 	}
-	else
-		return (0);
-	map->count_move++;
-	return (1);
 }
 
-int	move_right(t_map *map, t_game *game)
+void	move_right(t_map *map, t_game *game)
 {
-	if (map->map[map->start_y][map->start_x + 1] == 'C')
-		map->nbr_c--;
 	if (map->map[map->start_y][map->start_x + 1] == 'E' && map->nbr_c > 0)
-		return (0);
+	{
+		map->map[map->start_y][map->start_x] = '0';
+		map->map[map->start_y][map->start_x + 2] = 'P';
+		map->start_x = map->start_x + 2;
+		return ;
+	}
 	if (map->map[map->start_y][map->start_x + 1] != '1')
 	{
-		if (map->map[map->start_y][map->start_x + 1] == 'E')
+		if (map->map[map->start_y][map->start_x + 1] == 'E' && map->nbr_c == 0)
 			end(game);
 		map->map[map->start_y][map->start_x] = '0';
 		map->map[map->start_y][map->start_x + 1] = 'P';
 		map->start_x++;
 	}
-	else
-		return (0);
-	map->count_move++;
-	return (1);
 }
 
 int	handle_input(int key, t_game *game)
 {
-	int	i;
+	int	test;
+	int	test2;
 
-	i = 0;
-	(void)game;
+	test = game->map.start_x;
+	test2 = game->map.start_y;
 	if (key == XK_Down)
-		i = move_dowm(&game->map, game);
+		move_dowm(&game->map, game);
 	else if (key == XK_Up)
-		i = move_up(&game->map, game);
+		move_up(&game->map, game);
 	else if (key == XK_Left)
-		i = move_left(&game->map, game);
+		move_left(&game->map, game);
 	else if (key == XK_Right)
-		i = move_right(&game->map, game);
-	if (i == 1)
-		ft_printf("%d\n", game->map.count_move);
+		move_right(&game->map, game);
+	if (test != game->map.start_x || test2 != game->map.start_y)
+		ft_printf("%d\n", ++game->map.count_move);
+	map_find_diamond(&game->map);
 	return (0);
 }

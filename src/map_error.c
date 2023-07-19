@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:04:57 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/19 11:43:00 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/19 17:07:03 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,12 @@ void	map_error(t_map *map)
 			error_exit_free_map("error : wrong row lengh\n", map);
 		while (map->map[i][j] != '\0')
 		{
+			if ((i == 0 || j == 0 || i == map->y || j == map->x - 1) && map->map[i][j] != '1')
+				error_exit_free_map("error : bad borders\n", map);
 			map_error_tiles(map->map[i][j], map);
 			j++;
 		}
-		i++;
+	i++;
 	}
 	if (map->nbr_p + map->nbr_e != 2)
 		error_exit_free_map("error : wrong nbr of Charac/Exit\n", map);
@@ -51,7 +53,6 @@ void	map_error_tiles(char tile, t_map *map)
 			map->nbr_c++;
 	if (map->nbr_e > 1 || map->nbr_p > 1)
 		error_exit_free_map("error : wrong nbr of Charac/Exit\n", map);
-
 }
 
 void	map_is_possible(t_map *map)
@@ -96,12 +97,13 @@ int	map_flood_check(char **map, int size)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == 'E')
+			if (map[i][j] == 'E' || map[i][j] == 'C')
 			{
 				return (1);
 			}
 			j++;
 		}
+		printf("b : %s\n", map[i]);
 		i++;
 	}
 	return (0);

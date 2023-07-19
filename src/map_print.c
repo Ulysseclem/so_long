@@ -6,12 +6,11 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:02:10 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/19 11:32:49 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/19 12:53:02 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
 
 int	map_print(t_game *game)
 {
@@ -26,7 +25,8 @@ int	map_print(t_game *game)
 		j = 0;
 		while (game->map.map[i][j])
 		{
-			print_exit(game, &game->map, i, j);
+			if (game->map.map[i][j] == 'E')
+				print_exit(game, &game->map, i, j);
 			print_floor_wall_diamond(game, &game->map, i, j);
 			print_charac(game, &game->map, i, j);
 			print_charac_left(game, &game->map, i, j);
@@ -41,28 +41,30 @@ int	map_print(t_game *game)
 
 void	print_exit(t_game *game, t_map *map, int i, int j)
 {
-	if (map->map[i][j] == 'E' && \
-	map->map[i + 1][j] == 'P' && map->nbr_c > 0)
+	if (map->map[i + 1][j] == 'P' && map->nbr_c > 0)
 		render(game, map->px_x, (map->px_y + 28), \
 		game->texture.exit_lock_charac.mlx_img);
-	else if (map->map[i][j] == 'E' && \
-	map->map[i + 1][j] == 'L' && map->nbr_c > 0)
+	else if (map->map[i + 1][j] == 'L' && map->nbr_c > 0)
 		render(game, map->px_x, (map->px_y + 28), \
 		game->texture.exit_lock_charac_left.mlx_img);
-	else if (map->map[i][j] == 'E' && map->map[i + 1][j] != 'P' && \
-	map->map[i + 1][j] != 'L' && map->nbr_c > 0)
+	else if (map->nbr_c > 0 && map->map[i + 1][j] == '1')
+		render(game, map->px_x, (map->px_y + 28), \
+		game->texture.exit_lock_half.mlx_img);
+	else if (map->map[i + 1][j] != 'P' && \
+	map->map[i + 1][j] != 'L' && map->nbr_c > 0 && map->map[i + 1][j] != '1')
 		render(game, map->px_x, (map->px_y + 28), \
 		game->texture.exit_lock.mlx_img);
-	if (map->map[i][j] == 'E' && \
-	map->map[i + 1][j] == 'P' && map->nbr_c == 0)
+	else if (map->map[i + 1][j] == 'P' && map->nbr_c == 0)
 		render(game, map->px_x, (map->px_y + 28), \
 		game->texture.exit_charac.mlx_img);
-	else if (map->map[i][j] == 'E' && \
-	map->map[i + 1][j] == 'L' && map->nbr_c == 0)
+	else if (map->map[i + 1][j] == 'L' && map->nbr_c == 0)
 		render(game, map->px_x, (map->px_y + 28), \
 		game->texture.exit_charac_left.mlx_img);
-	else if (map->map[i][j] == 'E' && map->map[i + 1][j] != 'P' && \
-	map->map[i + 1][j] != 'L' && map->nbr_c == 0)
+	else if (map->map[i + 1][j] == '1')
+		render(game, map->px_x, (map->px_y + 28), \
+		game->texture.exit_half.mlx_img);
+	else if (map->map[i + 1][j] != 'P' && \
+	map->map[i + 1][j] != 'L' && map->nbr_c == 0 && map->map[i + 1][j] != '1')
 		render(game, map->px_x, (map->px_y + 28), game->texture.exit.mlx_img);
 }
 

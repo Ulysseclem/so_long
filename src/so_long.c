@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/19 11:38:37 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/19 15:23:22 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,21 @@ int	check_file(int ac, char *av)
 	return (0);
 }
 
+void	init_tab(t_textures *texture)
+{
+	t_img	*tab;
+
+	tab = malloc(sizeof(t_img) * 24);
+	texture->tab = tab;
+}
+
 int	main(int ac, char **av)
 {
 	t_game	game;
 
 	if (check_file(ac, av[1]) != 0)
 		return (0);
+	check_images_exist();
 	map_init(&game);
 	game.map.map_name = (av[1]);
 	map_read(&game);
@@ -51,7 +60,7 @@ int	main(int ac, char **av)
 		free(game.win_ptr);
 		return (MLX_ERROR);
 	}
-	load_asset(&game.texture, &game);
+	load_asset(&game.texture, game.mlx_ptr, &game);
 	mlx_key_hook (game.win_ptr, &handle_input, &game);
 	mlx_hook(game.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &game);
 	mlx_loop_hook(game.mlx_ptr, &map_print, &game);

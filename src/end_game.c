@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/19 11:07:10 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/19 17:03:05 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,17 @@ void	error_exit_free_map(char *str, t_map *map)
 int	handle_keypress(int key, t_game *game)
 {
 	if (key == XK_Escape)
+	{
+		game->map.count_move--;
 		end(game);
+	}
 	return (0);
 }
 
 void	free_assets(void *ptr, t_textures *texture)
 {
+	mlx_destroy_image(ptr, texture->wall_all.mlx_img);
+	mlx_destroy_image(ptr, texture->wall_top.mlx_img);
 	mlx_destroy_image(ptr, texture->floor_dirt_1.mlx_img);
 	mlx_destroy_image(ptr, texture->floor_half.mlx_img);
 	mlx_destroy_image(ptr, texture->charac_floor.mlx_img);
@@ -49,17 +54,18 @@ void	free_assets(void *ptr, t_textures *texture)
 	mlx_destroy_image(ptr, texture->diamond_floor_charac.mlx_img);
 	mlx_destroy_image(ptr, texture->diamond_floor_charac_left.mlx_img);
 	mlx_destroy_image(ptr, texture->exit.mlx_img);
+	mlx_destroy_image(ptr, texture->exit_half.mlx_img);
 	mlx_destroy_image(ptr, texture->exit_charac.mlx_img);
 	mlx_destroy_image(ptr, texture->exit_charac_left.mlx_img);
 	mlx_destroy_image(ptr, texture->exit_lock.mlx_img);
+	mlx_destroy_image(ptr, texture->exit_lock_half.mlx_img);
 	mlx_destroy_image(ptr, texture->exit_lock_charac.mlx_img);
 	mlx_destroy_image(ptr, texture->exit_lock_charac_left.mlx_img);
-	mlx_destroy_image(ptr, texture->wall_all.mlx_img);
-	mlx_destroy_image(ptr, texture->wall_top.mlx_img);
 }
 
 void	end(t_game *game)
 {
+	ft_printf("total move :%d\nEND\n", game->map.count_move + 1);
 	free_assets(game->mlx_ptr, &game->texture);
 	free_map(game->map.map, game->map.y);
 	mlx_destroy_window(game->mlx_ptr, game->win_ptr);
