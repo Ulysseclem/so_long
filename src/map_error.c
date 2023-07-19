@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:04:57 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/19 17:30:50 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/19 17:37:17 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	map_error(t_map *map)
 			error_exit_free_map("error : wrong row lengh\n", map);
 		while (map->map[i][j] != '\0')
 		{
-			if ((i == 0 || j == 0 || i == map->y ||\
+			if ((i == 0 || j == 0 || i == map->y || \
 			j == map->x - 1) && map->map[i][j] != '1')
 				error_exit_free_map("error : bad borders\n", map);
 			map_error_tiles(map->map[i][j], map);
