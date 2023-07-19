@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/17 16:55:24 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/17 19:48:49 by ulysse           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <X11/keysym.h>
 #include <mlx.h>
 
+
 int	render(t_game *game, int x, int y, void *img)
 {
 	if (game->win_ptr == NULL)
@@ -26,9 +27,14 @@ int	render(t_game *game, int x, int y, void *img)
 	return (0);
 }
 
-t_pixel	*img_get_pixel(t_img *img, int x, int y)
+t_img	init_image(void *mlx, char *path)
 {
-	return (img->addr + y * img->width + x);
+	t_img	img;
+
+	img.mlx_img = mlx_xpm_file_to_image(mlx, path, &img.width, &img.height);
+	if (img.mlx_img == NULL)
+		error_exit("xpm non trouve");
+	return (img);
 }
 
 void load_asset(t_textures *texture, t_game *game)
@@ -39,7 +45,6 @@ void load_asset(t_textures *texture, t_game *game)
 	texture->wall_all = init_image(mlx, WALL);
 	texture->wall_top = init_image(mlx, WALL_TOP);
 	texture->floor_dirt_1 = init_image(mlx, FLOOR);
-	(*img_get_pixel(&texture->floor_dirt_1, 47, 47)) = (t_pixel){.r = 255};
 	texture->floor_half = init_image(mlx, FLOOR_H);
 	texture->charac_floor = init_image(mlx, CHARAC);
 	texture->charac_floor_half = init_image(mlx, CHARAC_H);
@@ -61,17 +66,6 @@ void load_asset(t_textures *texture, t_game *game)
 	texture->exit_lock_charac_left = init_image(mlx, EXIT_LCK_C_L);
 }
 
-t_img	init_image(void *mlx, char *path)
-{
-	t_img	img;
-
-	img.mlx_img = mlx_xpm_file_to_image(mlx, path, &img.width, &img.height);
-	if (img.mlx_img == NULL)
-		error_exit("xpm non trouve");
-	img.addr = (t_pixel *) mlx_get_data_addr(img.mlx_img,
-			&img.bpp, &img.line_len, &img.endian);
-	return (img);
-}
 
 int check_file(int ac, char *av)
 {

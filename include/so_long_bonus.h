@@ -1,5 +1,17 @@
-#ifndef SO_LONG_H
-# define SO_LONG_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long_bonus.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ulysse <ulysse@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/18 11:20:00 by ulysse            #+#    #+#             */
+/*   Updated: 2023/07/17 21:31:05 by ulysse           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef SO_LONG_BONUS_H
+# define SO_LONG_BONUS_H
 
 # include "mlx.h"
 # include "libft.h"
@@ -16,14 +28,8 @@
 
 #define BUFFER_SIZE 5
 
-#define WINDOW_WIDTH 600
-#define WINDOW_HEIGHT 300
-
 #define MLX_ERROR 1
 
-#define RED_PIXEL 0xFF0000
-#define GREEN_PIXEL 0xFF00
-#define WHITE_PIXEL 0xFFFFFF
 
 # define WALL			"xpm/wall/all.xpm"
 # define WALL_TOP		"xpm/wall/top.xpm"
@@ -86,6 +92,7 @@ typedef struct s_img
 
 typedef struct s_textures
 {
+	t_img background;
 	t_img floor_dirt_1;
 	t_img floor_dirt_2;
 	t_img floor_dirt_1_half;
@@ -136,21 +143,6 @@ typedef struct s_textures
 
 }	t_textures;
 
-typedef struct s_data
-{
-	void	*mlx_ptr;
-	void	*win_ptr;
-	t_textures	texture;
-	int		cur_img;
-}	t_data;
-
-
-typedef struct s_pos
-{
-	int	x;
-	int	y;
-}	t_pos;
-
 typedef struct s_game
 {
 	void		*mlx_ptr;
@@ -198,7 +190,6 @@ int move_dowm(t_game *game);
 
 void	error_exit(char *str);
 void	error_exit_free_map(char *str, t_map *map);
-int	handle_keypress(int key, t_game *game);
 void	free_assets(void *ptr, t_textures *texture);
 void	end(t_game *game);
 

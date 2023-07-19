@@ -1,4 +1,5 @@
 NAME		= so_long
+BONUS		= test
 
 #------------------------------------------------#
 #   INGREDIENTS                                  #
@@ -42,8 +43,18 @@ SRCS        := $(SRCS:%=$(SRC_DIR)/%)
 BUILD_DIR   := .build
 OBJS        := $(SRCS:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
+# BONUS --------------------------
+SRC_DIR_BONUS	:= bonus
+SRCS_BONUS		:= main.c 
+
+SRCS_BONUS	:= $(SRCS_BONUS:%=$(SRC_DIR_BONUS)/%)
+BUILD_DIR_B   := .build_b
+OBJS_BONUS	:= $(SRCS_BONUS:$(SRC_DIR_BONUS)/%.c=$(BUILD_DIR_B)/%.o)
+
+# BONUS --------------------------
+
 DEPS        := $(OBJS:.o=.d)
-DEPS_B        := $(OBJS_BONUS:.o=.d)
+DEPS_B      := $(OBJS_BONUS:.o=.d)
 
 CC          := clang
 CFLAGS      := -Wall -Wextra -Werror -g
@@ -92,15 +103,31 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 
 -include $(DEPS)
 
+#bonus
+bonus: $(BONUS)
+
+$(BONUS): $(OBJS_BONUS)
+	$(CC) $(LDFLAGS) $(OBJS_BONUS) -Lmlx_linux -lmlx_Linux $(LDLIBS) -Imlx_linux -lXext -lX11 -lm -lz -o $(BONUS)
+	$(info CREATED $(BONUS))
+
+$(BUILD_DIR_B)/%.o: $(SRC_DIR_BONUS)/%.c
+	$(DIR_DUP)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -Imlx_linux -O3 -c -o $@ $<
+	$(info CREATED2 $@)
+#bonus
+
 clean:
 	for f in $(dir $(LIBS_TARGET)); do $(MAKE) -C $$f clean; done
 	$(RM) $(OBJS) $(DEPS)
+	$(RM) $(OBJS_BONUS) $(DEPS_B)
 
 fclean: clean
 	for f in $(dir $(LIBS_TARGET)); do $(MAKE) -C $$f fclean; done
 	$(RM) $(NAME)
+	$(RM) $(BONUS)
+
 
 re:
 	$(MAKE) fclean
 	$(MAKE) all
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re bonus
