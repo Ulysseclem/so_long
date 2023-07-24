@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:04:57 by uclement          #+#    #+#             */
-/*   Updated: 2023/07/19 17:37:17 by uclement         ###   ########.fr       */
+/*   Updated: 2023/07/24 13:57:55 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	map_is_possible(t_map *map)
 	if (map_flood_check(map_bis, map->y) == 1)
 	{
 		free_map(map_bis, map->y);
-		error_exit_free_map("error : Exit unreachable", map);
+		error_exit_free_map("error : Exit unreachable\n", map);
 	}
 	free_map(map_bis, map->y);
 }
@@ -103,7 +103,6 @@ int	map_flood_check(char **map, int size)
 			}
 			j++;
 		}
-		printf("b : %s\n", map[i]);
 		i++;
 	}
 	return (0);
