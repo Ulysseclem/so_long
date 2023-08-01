@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/19 15:23:22 by uclement         ###   ########.fr       */
+/*   Updated: 2023/08/01 12:42:53 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@
 #include <X11/X.h>
 #include <X11/keysym.h>
 #include <mlx.h>
+
+int	handle_exit(t_game *game)
+{
+	game->map.count_move--;
+	end(game);
+	return (0);
+}
 
 int	check_file(int ac, char *av)
 {
@@ -63,6 +70,7 @@ int	main(int ac, char **av)
 	load_asset(&game.texture, game.mlx_ptr, &game);
 	mlx_key_hook (game.win_ptr, &handle_input, &game);
 	mlx_hook(game.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &game);
+	mlx_hook(game.win_ptr, 17, 1L << 1, &handle_exit, &game);
 	mlx_loop_hook(game.mlx_ptr, &map_print, &game);
 	mlx_loop(game.mlx_ptr);
 }
