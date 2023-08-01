@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:20:34 by uclement          #+#    #+#             */
-/*   Updated: 2023/08/01 12:26:32 by uclement         ###   ########.fr       */
+/*   Updated: 2023/08/01 13:10:33 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,8 @@ typedef struct s_game
 }	t_game;
 
 int		check_file(int ac, char *av);
-int	handle_exit(t_game *game);
-int	check_file(int ac, char *av);
+int		handle_exit(t_game *game);
+int		check_file(int ac, char *av);
 
 void	map_read(t_game *game);
 void	map_size(t_map *map);
