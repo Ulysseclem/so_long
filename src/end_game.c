@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/07/24 15:35:23 by uclement         ###   ########.fr       */
+/*   Updated: 2023/08/01 13:09:46 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	handle_keypress(int key, t_game *game)
 		game->map.count_move--;
 		end(game);
 	}
-
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:04:59 by uclement          #+#    #+#             */
-/*   Updated: 2023/08/01 13:03:30 by uclement         ###   ########.fr       */
+/*   Updated: 2023/08/01 13:09:59 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	move_left(t_map *map, t_game *game)
 	if (map->map[map->start_y][map->start_x - 1] == 'E' && map->nbr_c > 0)
 	{
 		if (map->map[map->start_y][map->start_x - 2] == '1')
-			return;
+			return ;
 		map->map[map->start_y][map->start_x] = '0';
 		map->map[map->start_y][map->start_x - 2] = 'L';
 		map->start_x = map->start_x - 2;
@@ -92,7 +92,7 @@ void	move_right(t_map *map, t_game *game)
 	if (map->map[map->start_y][map->start_x + 1] == 'E' && map->nbr_c > 0)
 	{
 		if (map->map[map->start_y][map->start_x + 2] == '1')
-			return;
+			return ;
 		map->map[map->start_y][map->start_x] = '0';
 		map->map[map->start_y][map->start_x + 2] = 'P';
 		map->start_x = map->start_x + 2;

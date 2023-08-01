@@ -6,7 +6,7 @@
 /*   By: uclement <uclement@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 11:21:45 by ulysse            #+#    #+#             */
-/*   Updated: 2023/08/01 12:42:53 by uclement         ###   ########.fr       */
+/*   Updated: 2023/08/01 15:11:53 by uclement         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	main(int ac, char **av)
 	map_read(&game);
 	game.mlx_ptr = mlx_init();
 	if (game.mlx_ptr == NULL)
-		return (MLX_ERROR);
+		error_exit_free_map("missing env", &game.map);
 	game.win_ptr = mlx_new_window(game.mlx_ptr, game.map.x * 48, \
 	game.map.y * 48 + 28, "so_long");
 	if (game.win_ptr == NULL)
